@@ -15,6 +15,16 @@ readData <- function(file.name="articles.csv"){
     return(gsub("<.*?>", "", htmlString))
   }
   articles$content <- unlist(lapply(articles$content,cleanFun))
+  
+  #get rid of short articles
+  wordCount <- function(str){
+    sapply(strsplit(str, " "), length)
+  }
+  
+  articles <- articles[wordCount(articles$content)>50,]
+  
+  
+  
   articles
 }
 
