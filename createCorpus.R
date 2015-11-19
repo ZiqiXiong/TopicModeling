@@ -1,4 +1,5 @@
 require('tm')
+require('topicmodels')
 require('SnowballC')
 source('readData.R')
 articles <- readData()
@@ -13,10 +14,8 @@ myCorpus <- tm_map(myCorpus, stemDocument,lazy=TRUE)
 
 dtm = DocumentTermMatrix(myCorpus) 
 dtm <- removeSparseTerms(dtm, 0.99)
-dtm = as.matrix(dtm)
 
-require('topicmodels')
-k <- 20
+k <- 18
 SEED <- 47
 topic.model <- LDA(dtm,k,control=list(seed=SEED))
 

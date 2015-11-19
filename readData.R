@@ -1,8 +1,10 @@
-readData <- function(file.name="articles.csv"){
+readData <- function(){
+  require('dplyr')
   
   #read data from raw csv file
-  articles <- read.csv(file.name)
-  articles <- articles[,c(1,2,3,7)]
+  articles <- read.csv("articles.csv")
+  articles <- articles %>% filter(published==1)
+  articles <- articles[,c(1,2,3,7,12)]
   
   #format the data
   articles$title <- as.character(articles$title)
@@ -20,10 +22,15 @@ readData <- function(file.name="articles.csv"){
   wordCount <- function(str){
     sapply(strsplit(str, " "), length)
   }
-  
   articles <- articles[wordCount(articles$content)>50,]
   
-  
+  #link authors to their articles
+  profile.article <- read.csv('profile_article.csv')[,c(2,3)]
+  profiles <- read.csv('profiles.csv')[,c(1,3)]
+  names(profiles) <- c('profile_id', 'author_name')
+  profile.article <- left_join(profile.article,profiles,by="profile_id")
+  names(profile.article)[1] <- 'id'
+  articles <- left_join(articles,profile.article, by="id")
   
   articles
 }
