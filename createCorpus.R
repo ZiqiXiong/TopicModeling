@@ -19,7 +19,7 @@ k <- 18
 SEED <- 47
 topic.model <- LDA(dtm,k,control=list(seed=SEED))
 
-
+topic.result <- data.frame(topics(topic.model,5))
 
 
 
