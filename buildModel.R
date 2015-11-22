@@ -20,6 +20,7 @@ myCorpus <- tm_map(myCorpus, stemDocument,lazy=TRUE)
 dtm = DocumentTermMatrix(myCorpus) 
 dtm <- removeSparseTerms(dtm, 0.99)
 ks <- c(20,25,30,35,40,45)
+
 for(k in ks){
   SEED <- 47
   topic.model <- LDA(dtm,k,control=list(seed=SEED))
