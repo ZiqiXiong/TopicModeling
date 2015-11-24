@@ -17,7 +17,9 @@ shinyUI(fluidPage(
     
     # Show a plot of the generated distribution
     mainPanel(
-      dataTableOutput('topic.table')
+      tabsetPanel(
+        tabPanel("Topic Keywords",dataTableOutput('topic.table'))
+      )
     )
   )
 ))
