@@ -1,4 +1,5 @@
 library(shiny)
+source("classifyNewArticle.R")
 
 #load all the topic objects
 topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
@@ -40,6 +41,12 @@ shinyServer(function(input, output) {
   output$article.page <- renderUI({
     article.id <- input$article.id
     getPage(article.id)
+  })
+  
+  output$new.article.table <- renderDataTable({
+    topic.number <- input$topic.number
+    content <- input$new.article
+    classifyResult(content,topic.objects[[topic.number]])
   })
   
   

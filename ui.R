@@ -22,7 +22,11 @@ shinyUI(fluidPage(
         # the tabset panel that shows topic terms table
         tabPanel("Topic Keywords",dataTableOutput('topic.table')),
         # the tabset panel that shows the composition of article
-        tabPanel("Articles",textInput("article.id", h4("Article ID:"),"5000"),htmlOutput("article.page"))
+        tabPanel("Articles",textInput("article.id", h4("Article ID:"),"5000"),htmlOutput("article.page")),
+        # the tabset panel that classifies new article
+        tabPanel("Analyze New Article",h4("New article content:"),
+                 tags$textarea(id="new.article", cols=40, ""),
+                 dataTableOutput('new.article.table'))
       )
     )
   )
