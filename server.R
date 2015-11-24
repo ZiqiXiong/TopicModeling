@@ -1,0 +1,30 @@
+library(shiny)
+
+#load all the topic objects
+topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
+                      "45 topics","50 topics")
+topic.objects <- list()
+for (topic.file.name in topic.file.names){
+  load(topic.file.name)
+  topic.objects[[topic.file.name]] <- topic.model
+}
+remove(topic.model)
+
+
+
+
+# Define server logic required to draw a histogram
+shinyServer(function(input, output) {
+  
+  # Expression that generates a histogram. The expression is
+  # wrapped in a call to renderPlot to indicate that:
+  #
+  #  1) It is "reactive" and therefore should re-execute automatically
+  #     when inputs change
+  #  2) Its output type is a plot
+ 
+  output$topic.table <- renderDataTable({
+    topic.number <- input$topic.number
+    terms(topic.objects[[topic.number]],20)
+  },options = list(pageLength = 10))
+})
