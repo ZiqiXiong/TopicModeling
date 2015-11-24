@@ -10,6 +10,15 @@ for (topic.file.name in topic.file.names){
 }
 remove(topic.model)
 
+#load articles
+source("readData.R")
+articles <- readData()
+getPage<-function(article.id) {
+  return(tags$iframe(src=paste("http://tsl.news/article/",article.id,sep=''),
+                  style="width:100%;",  frameborder="0"
+                     ,id="iframe"
+                     , height = "500px"))
+}
 
 
 
@@ -27,4 +36,14 @@ shinyServer(function(input, output) {
     topic.number <- input$topic.number
     terms(topic.objects[[topic.number]],20)
   },options = list(pageLength = 10))
+  
+  output$article.page <- renderUI({
+    article.id <- input$article.id
+    getPage(article.id)
+  })
+  
+  
+  
+  
+  
 })
