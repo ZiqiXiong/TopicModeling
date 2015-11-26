@@ -1,5 +1,5 @@
 library(shiny)
-source("classifyNewArticle.R")
+source("helpers.R")
 
 #load all the topic objects
 topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
@@ -12,7 +12,6 @@ for (topic.file.name in topic.file.names){
 remove(topic.model)
 
 #load articles
-source("readData.R")
 articles <- readData()
 getPage<-function(article.id) {
   return(tags$iframe(src=paste("http://tsl.news/article/",article.id,sep=''),
@@ -35,7 +34,7 @@ shinyServer(function(input, output) {
  
   output$topic.table <- renderDataTable({
     topic.number <- input$topic.number
-    terms(topic.objects[[topic.number]],20)
+    get.topic.terms(topic.objects[[topic.number]],20)
   },options = list(pageLength = 10))
   
   output$article.page <- renderUI({
