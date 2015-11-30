@@ -83,5 +83,10 @@ get.topic.terms <- function(topic.model, term.num){
   topic.terms = terms(topic.model,term.num)
 }
 
+join.articles.with.topics <- function(articles,topic.model,topic.num){
+  articles.topics <- get.articles.topics(topic.model,topic.num)
+  dplyr::inner_join(articles,articles.topics,by="id")
+}
+
 
 
