@@ -11,27 +11,26 @@ authorGraph <- function(data, authName) {
 
 filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after=NA) {
   tempData = arrange(data, published_date)
-  if(is.na(authName == FALSE)) {
+  if(!is.na(authName)) {
     tempData = filter(tempData, author_name == authName)
   }
   
-  if(is.na(topic) == FALSE) {
+  if(!is.na(topic)) {
     
   }
   
-  if(is.na(before)==FALSE && is.na(after)==FALSE) {
+  if(!is.na(before) && !is.na(after)) {
     intrvl = interval(ymd(before), ymd(after))
     tempData = filter(tempData, published_date %within% intrvl)
   }
-  else if(is.na(before)==FALSE) {
+  else if(!is.na(before)) {
     intrvl = interval(tempData$published_date[1], ymd(before))
     tempData = filter(tempData, published_date %within% intrvl)
   }
-  else if(is.na(after)==FALSE) {
+  else if(!is.na(after)) {
     intrvl = interval(ymd(after), tempdData$published_date[nrow(tempData)])
     tempData = filter(tempData, published_date %within% intrvl)
   }
-  else{}
   
   tempData
 }
@@ -40,25 +39,23 @@ topicgraph <- function(data, topic, numTopics=1, timeRange=NA) {
   if(timeRange != NA) {
     
   }
-  else{}
 }
 
 #sub-function used to test for bigger filtering function
 timeFilter <- function(data, before=NA, after=NA) {
   tempData = arrange(data, published_date)
-  if(is.na(before)==FALSE && is.na(after)==FALSE) {
+  if(!is.na(before) && !is.na(after)) {
     intrvl = interval(ymd(before), ymd(after))
     tempData = filter(tempData, published_date %within% intrvl)
   }
-  else if(is.na(before)==FALSE) {
+  else if(!is.na(before)) {
     intrvl = interval(tempData$published_date[1], ymd(before))
     tempData = filter(tempData, published_date %within% intrvl)
   }
-  else if(is.na(after)==FALSE) {
+  else if(!is.na(after)) {
     intrvl = interval(ymd(after), tempdData$published_date[nrow(tempData)])
     tempData = filter(tempData, published_date %within% intrvl)
   }
-  else{}
   
   tempData
 }

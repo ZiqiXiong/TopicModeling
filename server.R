@@ -1,5 +1,5 @@
 library(shiny)
-source("helpers.R")
+source("dependencies.R")
 
 #load all the topic objects
 topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
