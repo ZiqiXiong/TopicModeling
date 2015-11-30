@@ -42,6 +42,11 @@ shinyServer(function(input, output) {
     getPage(article.id)
   })
   
+  output$article.table <- renderDataTable({
+    topic.num <- input$topic.number
+    get.article.topic(topic.objects[[topic.num]],input$article.id)
+  })
+  
   output$new.article.table <- renderDataTable({
     topic.number <- input$topic.number
     content <- input$new.article

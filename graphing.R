@@ -1,13 +1,8 @@
 authorGraph <- function(data, authName) {
-  require(ggplot2)
-  require(lubridate)
-  require(dplyr)
-  
   tempData <- filter(data, author_name == authName)
   tempData <- arrange(tempData, published_date)
   intrvl <- interval(tempData$published_date[1], tempData$published_date[nrow(tempData)])
   nmonths <- intrvl %/% months(1)
-  nmonths
   ggplot(tempData, aes(x=published_date)) +
     geom_histogram(binwidth = nmonths)
   
@@ -15,15 +10,10 @@ authorGraph <- function(data, authName) {
 }
 
 filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after=NA) {
-  require(dplyr)
-  require(lubridate)
-  
   tempData = arrange(data, published_date)
-  
   if(is.na(authName == FALSE)) {
     tempData = filter(tempData, author_name == authName)
   }
-  else{}
   
   if(is.na(topic) == FALSE) {
     
@@ -47,15 +37,10 @@ filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after
 }
 
 topicgraph <- function(data, topic, numTopics=1, timeRange=NA) {
-  require(ggplot2)
-  require(lubridate)
-  
   if(timeRange != NA) {
     
   }
   else{}
-  
-  
 }
 
 #sub-function used to test for bigger filtering function
