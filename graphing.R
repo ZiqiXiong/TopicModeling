@@ -11,12 +11,21 @@ authorGraph <- function(data, authName) {
 
 filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after=NA) {
   tempData = arrange(data, published_date)
+  
   if(!is.na(authName)) {
     tempData = filter(tempData, author_name == authName)
   }
   
   if(!is.na(topic)) {
-    
+    if(topicSig==1){
+      tempData = filter(tempData, X1 == topic)
+    }
+    else if(topicSig=2) {
+      tempData = filter(tempData, X1 == topic | X2 == topic)
+    }
+    else{
+      tempData = filter(tempData, X1 == topic | X2 == topic | X3 == topic)
+    }
   }
   
   if(!is.na(before) && !is.na(after)) {
@@ -35,10 +44,23 @@ filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after
   tempData
 }
 
-topicgraph <- function(data, topic, numTopics=1, timeRange=NA) {
-  if(timeRange != NA) {
-    
+topicgraph <- function(data, divide="m") {
+  intrvl <- interval(data$published_date[1], data$published_date[nrow(data)])
+  if(divide=="m") {
+    nbins <- intrvl %/% months(1)
   }
+  else if(divide=="w") {
+    nbins <- intrvl %/% weeks(1)
+  }
+  else if(divide=="d") {
+    nbins <- intrvl %/% days(1)
+  }
+  else{
+    nbins <- intrvl %/% years(1)
+  }
+  
+  ggplot(tempData, aes(x=published_date)) +
+    geom_histogram(binwidth = nbins)
 }
 
 #sub-function used to test for bigger filtering function
