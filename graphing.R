@@ -20,7 +20,7 @@ filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after
     if(topicSig==1){
       tempData = filter(tempData, X1 == topic)
     }
-    else if(topicSig=2) {
+    else if(topicSig==2) {
       tempData = filter(tempData, X1 == topic | X2 == topic)
     }
     else{
@@ -44,7 +44,8 @@ filterData <- function(data, authName=NA, topic=NA, topicSig=1, before=NA, after
   tempData
 }
 
-topicgraph <- function(data, divide="m") {
+topicgraph <- function(data, topic, topic.sig, divide="m") {
+  tempData <- filterData(data, topic=topic,topicSig =topic.sig)
   intrvl <- interval(data$published_date[1], data$published_date[nrow(data)])
   if(divide=="m") {
     nbins <- intrvl %/% months(1)
