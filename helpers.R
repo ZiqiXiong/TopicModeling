@@ -63,15 +63,29 @@ toNumber <- function(str){
   x
 }
 
-get.article.topics <- function(topic.model,topic.num){
+get.articles.topics <- function(topic.model,topic.num){
   article.topics = data.frame(t(data.frame(topics(topic.model,topic.num))))
   article.topics$id = rownames(article.topics)
   rownames(article.topics) = c()
   article.topics$id <- as.integer(sapply(article.topics$id,toNumber))
+  article.topics
+}
+
+get.article.topic <- function(topic.model,article.id){
+  article.topics <- get.articles.topics(topic.model,3)
+  topics <- article.topics %>% dplyr::filter(id==article.id)
+  topics <- topics %>% select(-id)
+  names(topics) <- c("1st","2nd","3rd")
+  topics
 }
 
 get.topic.terms <- function(topic.model, term.num){
   topic.terms = terms(topic.model,term.num)
+}
+
+join.articles.with.topics <- function(articles,topic.model,topic.num){
+  articles.topics <- get.articles.topics(topic.model,topic.num)
+  dplyr::inner_join(articles,articles.topics,by="id")
 }
 
 

@@ -1,5 +1,5 @@
 library(shiny)
-source("helpers.R")
+source("dependencies.R")
 
 #load all the topic objects
 topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
@@ -40,6 +40,11 @@ shinyServer(function(input, output) {
   output$article.page <- renderUI({
     article.id <- input$article.id
     getPage(article.id)
+  })
+  
+  output$article.table <- renderDataTable({
+    topic.num <- input$topic.number
+    get.article.topic(topic.objects[[topic.num]],input$article.id)
   })
   
   output$new.article.table <- renderDataTable({
