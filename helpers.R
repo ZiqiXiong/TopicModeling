@@ -2,8 +2,10 @@ readData <- function(){
   require('dplyr')
   
   #read data from raw csv file
-  articles <- read.csv("articles.csv")
-  articles <- articles %>% filter(published==1)
+  articles <- read.csv("articles.csv",header=FALSE)
+  names(articles) <- c('id','title','content','clicks','created_date','published','published_date',
+                       'updated_date','legacy_id','position','issue_id','section_id')
+  articles <- articles %>% dplyr::filter(published==1)
   articles <- articles[,c(1,2,3,7,12)]
   
   #format the data
@@ -25,8 +27,9 @@ readData <- function(){
   articles <- articles[wordCount(articles$content)>50,]
   
   #link authors to their articles
-  profile.article <- read.csv('profile_article.csv')[,c(2,3)]
-  profiles <- read.csv('profiles.csv')[,c(1,3)]
+  profile.article <- read.csv('profile_article.csv', header=FALSE)[,c(2,3)]
+  names(profile.article) <- c("article_id","profile_id")
+  profiles <- read.csv('profiles.csv', header=FALSE)[,c(1,3)]
   names(profiles) <- c('profile_id', 'author_name')
   profile.article <- left_join(profile.article,profiles,by="profile_id")
   names(profile.article)[1] <- 'id'

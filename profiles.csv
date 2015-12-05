@@ -1,4 +1,3 @@
-id,position,display_name,legacy_id,user_id
 2,author,"Matt Wolfson",4,
 3,author,"Stefan Castellanos",5,
 4,author,"Abe Cass",6,
@@ -506,7 +505,7 @@ id,position,display_name,legacy_id,user_id
 507,author,"James Waller",527,
 508,author,"Claire Brickson",528,
 509,author,"Emma Wolfarth",529,
-510,author,"Caroline Bowman",522,
+510,editor,"Caroline Bowman",522,185
 511,editor,"Saahil Desai",530,62
 512,author,"Tasty Temptations",531,
 513,author,"Oliver Shirley",532,
@@ -738,7 +737,7 @@ id,position,display_name,legacy_id,user_id
 742,author,"Jenna Archer",761,
 743,author,"Elizabeth Schofield",762,
 744,author,"Molly Hickey",763,
-745,author,"Adin Bonapart",764,
+745,author,"Adin Bonapart",764,188
 746,author,"Madeline McGaughey",765,
 747,author,"Meagan Tokunaga",766,
 748,author,"Scripps Coalition Against More",767,
@@ -1094,3 +1093,16 @@ id,position,display_name,legacy_id,user_id
 1112,author,"Victor de Fontnouvelle",,179
 1113,guest,"Selena Spier",,180
 1114,guest,"Scripps  Marketing and Communications",,181
+1115,guest,"Aseem Chipalkatti",,182
+1116,guest,"Jade  Taylor",,183
+1117,guest,"Jade Taylor",,184
+1118,photographer,"Jessica  Eu",,186
+1119,guest,"Davis  Gold ",,187
+1120,guest,"Paula Reyes Daza",,189
+1121,guest,"Penny Tracion",,190
+1122,guest,"Leah Mathias",,191
+1123,guest,"Melissa Petito",,192
+1124,guest,"Leah Enelow",,193
+1125,guest,"Carol Ann  Routh",,194
+1126,guest,"Tommy Erb",,195
+1127,guest,"Jack Carroll",,196
