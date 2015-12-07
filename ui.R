@@ -35,7 +35,7 @@ shinyUI(navbarPage("Topic Analysis of TSL articles",
                    tabPanel("Topic vs Time",
                             h4("Popularity of topic over time"),
                             textInput("graph.topic.id", h4("Topic ID:"),"1"),
-                           plotOutput("topic.time.graph")
+                            ggvisOutput("p")
                    )
 ))
 

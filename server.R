@@ -25,7 +25,7 @@ getPage<-function(article.id) {
 
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(input, output,session) {
   
   # Expression that generates a histogram. The expression is
   # wrapped in a call to renderPlot to indicate that:
@@ -61,12 +61,10 @@ shinyServer(function(input, output) {
     classifyResult(content,topic.objects[[topic.number]])
   })
   
-  output$topic.time.graph <- renderPlot({
-    topicgraph(joined.articles(),input$graph.topic.id,3,7)
-  })
-  
-  
-  
+  reactive({
+    topicgraph2(joined.articles(),input$graph.topic.id,3,7) %>%
+      set_options(width = 1200, height = 800)
+  }) %>% bind_shiny("p")
   
   
 })
