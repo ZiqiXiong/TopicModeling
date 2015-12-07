@@ -91,5 +91,9 @@ join.articles.with.topics <- function(articles,topic.model,topic.num){
   dplyr::inner_join(articles,articles.topics,by="id")
 }
 
+convertSecondsToDate <- function(seconds){
+  as.Date(as.POSIXct(seconds/1000,origin = "1970-01-01",tz = "GMT"))
+}
+
 
 

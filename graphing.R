@@ -56,11 +56,11 @@ topicgraph <- function(data, topic, topic.sig, divide) {
     theme_bw() + theme(axis.text.x = element_text(angle=90)) 
 }
 
-topicgraph2 <- function(data, topic, topic.sig, divide){
+topicgraph2 <- function(data, topic, topic.sig=1, divide=7){
   tempData <- filterData(data, topic=topic,topicSig =topic.sig)
   date_grid = seq(as.Date('2009/3/1'), as.Date('2016/1/1'), "months")
   tempData %>% ggvis(~published_date) %>% 
-    layer_histograms(width=divide) %>% add_axis("x",ticks=length(date_grid), grid=FALSE,
+    layer_histograms(width=divide) %>% add_axis("x",ticks=length(date_grid), grid=FALSE,title = topic,
               properties=axis_props(labels=list(angle=90, fontSize = 8, align="left"))) 
 }
 

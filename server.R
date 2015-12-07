@@ -24,8 +24,24 @@ getPage<-function(article.id) {
 
 
 
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
+  
+  tooltipFunc <- function(x) {
+      if (is.null(x)) return(NULL)
+      else {
+        articles = filterData(joined.articles(),topic=input$graph.topic.id,topicSig=2)
+        index = articles$title; value = articles$published_date
+        strwrap(
+          paste(index[ (value >= convertSecondsToDate(x$xmin_) ) 
+                       & (value <= convertSecondsToDate(x$xmax_))
+                       ],
+                collapse=', '),
+          width = 60)
+      }
+    }
+
   
   # Expression that generates a histogram. The expression is
   # wrapped in a call to renderPlot to indicate that:
@@ -40,6 +56,10 @@ shinyServer(function(input, output,session) {
     joined.articles
   })
  
+  output$test.table <- renderDataTable({
+    joined.articles.with.topic  
+  })
+  
   output$topic.table <- renderDataTable({
     topic.number <- input$topic.number
     get.topic.terms(topic.objects[[topic.number]],20)
@@ -62,7 +82,8 @@ shinyServer(function(input, output,session) {
   })
   
   reactive({
-    topicgraph2(joined.articles(),input$graph.topic.id,3,7) %>%
+    topicgraph2(joined.articles(),input$graph.topic.id,2,7) %>%
+      add_tooltip(tooltipFunc, 'hover') %>%
       set_options(width = 1200, height = 800)
   }) %>% bind_shiny("p")
   
