@@ -1,5 +1,7 @@
 library(shiny)
 source("dependencies.R")
+source('helpers.R')
+source("graphing.R")
 
 #load all the topic objects
 topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
@@ -31,6 +33,12 @@ shinyServer(function(input, output) {
   #  1) It is "reactive" and therefore should re-execute automatically
   #     when inputs change
   #  2) Its output type is a plot
+  
+  joined.articles <- reactive({
+    topic.number <- input$topic.number
+    joined.articles = join.articles.with.topics(articles,topic.objects[[topic.number]],3)
+    joined.articles
+  })
  
   output$topic.table <- renderDataTable({
     topic.number <- input$topic.number
@@ -51,6 +59,10 @@ shinyServer(function(input, output) {
     topic.number <- input$topic.number
     content <- input$new.article
     classifyResult(content,topic.objects[[topic.number]])
+  })
+  
+  output$topic.time.graph <- renderPlot({
+    topicgraph(joined.articles(),input$graph.topic.id,3,7)
   })
   
   

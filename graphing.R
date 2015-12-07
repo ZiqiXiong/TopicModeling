@@ -11,32 +11,32 @@ authorGraph <- function(data, authName) {
 
 filterData <- function(tempData, authName=NA, topic=NA, topicSig=1, before=NA, after=NA) {
   if(!is.na(authName)) {
-    tempData = filter(tempData, author_name == authName)
+    tempData = dplyr::filter(tempData, author_name == authName)
   }
   
   if(!is.na(topic)) {
     if(topicSig==1){
-      tempData = filter(tempData, X1 == topic)
+      tempData = dplyr::filter(tempData, X1 == topic)
     }
     else if(topicSig==2) {
-      tempData = filter(tempData, X1 == topic | X2 == topic)
+      tempData = dplyr::filter(tempData, X1 == topic | X2 == topic)
     }
     else{
-      tempData = filter(tempData, X1 == topic | X2 == topic | X3 == topic)
+      tempData = dplyr::filter(tempData, X1 == topic | X2 == topic | X3 == topic)
     }
   }
   
   if(!is.na(before) && !is.na(after)) {
     intrvl = interval(ymd(before), ymd(after))
-    tempData = filter(tempData, published_date %within% intrvl)
+    tempData = dplyr::filter(tempData, published_date %within% intrvl)
   }
   else if(!is.na(before)) {
     intrvl = interval(min(data$published_date), ymd(before))
-    tempData = filter(tempData, published_date %within% intrvl)
+    tempData = dplyr::filter(tempData, published_date %within% intrvl)
   }
   else if(!is.na(after)) {
     intrvl = interval(ymd(after), max(data$published_date))
-    tempData = filter(tempData, published_date %within% intrvl)
+    tempData = dplyr::filter(tempData, published_date %within% intrvl)
   }
   
   tempData
@@ -49,10 +49,11 @@ topicgraph <- function(data, topic, topic.sig, divide) {
   
   ggplot(tempData, aes(x=published_date)) +
     geom_histogram(binwidth=divide)+
-    scale_x_date(breaks="2 month", labels=date_format("%Y-%b"),
+    scale_x_date(breaks="1 month",
+                 labels=date_format("%Y-%b"),
                  limits=c(intrvl[1],intrvl[2])) +
     ylab("Frequency") + xlab("Year and Month") +
-    theme_bw() + theme(axis.text.x = element_text(angle=90))
+    theme_bw() + theme(axis.text.x = element_text(angle=90)) 
 }
 
 #sub-function used to test for bigger filtering function
