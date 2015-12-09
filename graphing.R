@@ -48,7 +48,7 @@ topicgraph <- function(data, topic, topic.sig, divide) {
 
   
   ggplot(tempData, aes(x=published_date)) +
-    geom_histogram(binwidth=divide)+
+    geom_histogram(binwidth=divide,fill="#119CF9")+
     scale_x_date(breaks="1 month",
                  labels=date_format("%Y-%b"),
                  limits=c(intrvl[1],intrvl[2])) +
@@ -60,8 +60,50 @@ topicgraph2 <- function(data, topic, topic.sig=1, divide=7){
   tempData <- filterData(data, topic=topic,topicSig =topic.sig)
   date_grid = seq(as.Date('2009/3/1'), as.Date('2016/1/1'), "months")
   tempData %>% ggvis(~published_date) %>% 
-    layer_histograms(width=divide) %>% add_axis("x",ticks=length(date_grid), grid=FALSE,title = topic,
+    layer_histograms(width=divide,fill:="119CF9",stroke :="119CF9") %>% add_axis("x",ticks=length(date_grid), grid=FALSE,
               properties=axis_props(labels=list(angle=90, fontSize = 8, align="left"))) 
+}
+
+authorChart <- function(articles, author, topic.sig){
+  works = dplyr::filter(articles,author_name==author)
+  works.by.topic = authorChartHelper(works,topic.sig)
+  works.pie <- rCharts$new()
+  works.pie$setLib("http://timelyportfolio.github.io/rChartsExtra/d3pie")
+  works.pie$params$chartspec <- list(
+    header = list(
+      title = list(
+        text = paste('What does',author,'write about?')
+      )
+    )
+    ,data = list(
+      content = works.by.topic
+    )
+    ,labels = list(
+      lines = list(style = "straight")
+    ),
+    tooltips = list(
+        type = "caption")
+      
+  )
+  works.pie
+}
+
+authorChartHelper <- function(works,topic.sig){
+  if(topic.sig==3){
+    topic.freq = c(works$X1,works$X2,works$X3);
+  }else if(topic.sig==2){
+    topic.freq = c(works$X1,works$X2);
+  }else{
+    topic.freq = c(works$X1);
+  }
+  topic.freq = data.frame(table(topic.freq))
+  names(topic.freq) = c('label','value')
+  topic.freq$label = as.character(topic.freq$label )
+  topic.freq$value= as.numeric(topic.freq$value )
+  sum.freq = sum(topic.freq$value)
+  topic.perc = topic.freq$value/sum.freq
+  topic.freq = dplyr::filter(topic.freq,topic.perc>0.05)
+  topic.freq
 }
 
 #sub-function used to test for bigger filtering function
