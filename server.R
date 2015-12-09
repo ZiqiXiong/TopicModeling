@@ -23,8 +23,6 @@ getPage<-function(article.id) {
 }
 
 
-
-
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
   
@@ -40,7 +38,17 @@ shinyServer(function(input, output,session) {
                 collapse=', '),
           width = 60)
       }
+  }
+  
+  
+  tooltipFunc2 <- function(x) {
+    if (is.null(x)) return(NULL)
+    else {
+      works = filterData(joined.articles(),topic=x$label,authName=input$author.name,topicSig=2)
+      titles = works$title
+      strwrap(paste(titles,collapse=', '),width = 60)
     }
+  }
 
   
   # Expression that generates a histogram. The expression is
@@ -81,10 +89,17 @@ shinyServer(function(input, output,session) {
     classifyResult(content,topic.objects[[topic.number]])
   })
   
+  
+  reactive({
+    authorChart(joined.articles(),input$author.name,2) %>%
+      add_tooltip(tooltipFunc2, 'hover') 
+      
+  }) %>% bind_shiny("a")  
+  
   reactive({
     topicgraph2(joined.articles(),input$graph.topic.id,2,7) %>%
       add_tooltip(tooltipFunc, 'hover') %>%
-      set_options(width = 1200, height = 800)
+    set_options(width = 1200, height = 800)
   }) %>% bind_shiny("p")
   
   

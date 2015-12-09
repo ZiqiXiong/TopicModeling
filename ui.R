@@ -1,5 +1,7 @@
 library(shiny)
-
+source("dependencies.R")
+source('helpers.R')
+source("graphing.R")
 default.content="I have a dream that one day on the red hills of Georgia, 
 the sons of former slaves and the sons of former slave owners will be able to sit down 
 together at the table of brotherhood. I have a dream that one day even the state 
@@ -32,10 +34,18 @@ shinyUI(navbarPage("Topic Analysis of TSL articles",
                             tags$textarea(id="new.article", cols=40, default.content),
                             dataTableOutput('new.article.table')),
                    
+                   tabPanel("Author Chart",
+                            h4("Author Chart"),
+                            textInput("author.name", h4("Author Name:"),"Editorial Board"),
+                            ggvisOutput('a')
+                            ),
+                   
                    tabPanel("Topic vs Time",
                             h4("Popularity of topic over time"),
                             textInput("graph.topic.id", h4("Topic ID:"),"1"),
                             ggvisOutput("p")
-                   )
+                            )
+                   
+
 ))
 

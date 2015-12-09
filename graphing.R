@@ -67,25 +67,9 @@ topicgraph2 <- function(data, topic, topic.sig=1, divide=7){
 authorChart <- function(articles, author, topic.sig){
   works = dplyr::filter(articles,author_name==author)
   works.by.topic = authorChartHelper(works,topic.sig)
-  works.pie <- rCharts$new()
-  works.pie$setLib("http://timelyportfolio.github.io/rChartsExtra/d3pie")
-  works.pie$params$chartspec <- list(
-    header = list(
-      title = list(
-        text = paste('What does',author,'write about?')
-      )
-    )
-    ,data = list(
-      content = works.by.topic
-    )
-    ,labels = list(
-      lines = list(style = "straight")
-    ),
-    tooltips = list(
-        type = "caption")
-      
-  )
-  works.pie
+  works.by.topic %>% ggvis(~label,~value) %>% layer_bars(fill=~label) %>%
+    add_axis("x", title = "Topics",grid=FALSE) %>%
+    add_axis("y", title = "Frequency")
 }
 
 authorChartHelper <- function(works,topic.sig){
@@ -97,13 +81,19 @@ authorChartHelper <- function(works,topic.sig){
     topic.freq = c(works$X1);
   }
   topic.freq = data.frame(table(topic.freq))
-  names(topic.freq) = c('label','value')
-  topic.freq$label = as.character(topic.freq$label )
-  topic.freq$value= as.numeric(topic.freq$value )
-  sum.freq = sum(topic.freq$value)
-  topic.perc = topic.freq$value/sum.freq
-  topic.freq = dplyr::filter(topic.freq,topic.perc>0.05)
-  topic.freq
+  if (nrow(topic.freq)==0){
+    topic.freq = data.frame(label=0,value=0)
+    topic.freq$label= as.character(topic.freq$label)
+    topic.freq
+  }else{
+    names(topic.freq) = c('label','value')
+    topic.freq$label= as.character(topic.freq$label)
+    topic.freq$value= as.numeric(topic.freq$value )
+    sum.freq = sum(topic.freq$value)
+    topic.perc = topic.freq$value/sum.freq
+    topic.freq = dplyr::filter(topic.freq,topic.perc>0.05) %>% dplyr::arrange(value) 
+    topic.freq
+  }
 }
 
 #sub-function used to test for bigger filtering function
@@ -124,3 +114,6 @@ timeFilter <- function(data, before=NA, after=NA) {
   
   tempData
 }
+
+
+
