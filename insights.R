@@ -15,13 +15,12 @@ articles_per_writer = articles %>%
 
 # histogram of how many different pieces writers have written
 articles_per_writer %>%
-  ggplot(aes(x = total)) + geom_histogram(binwidth = 1)
+  ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle('Histogram of Articles per Writer') + xlab('Number of Writers') + ylab('Number of Articles Written')
 
 # important to note in the above that at least some of the counts include guest
 # writers for opinions pieces who only write one or maybe a few pieces in their
 # time in Claremont
 
-# FIGURE OUT HOW TO GET SECTION IN GRAPH TITLE
 sections = c('News','L&S','Ops','Sports')
 for (num in 1:4) {
   section <- sections[num]
@@ -30,7 +29,7 @@ for (num in 1:4) {
     filter(section_id == num) %>%
     group_by(profile_id) %>%
     summarise(total = n()) %>%
-    ggplot(aes(x = total)) + geom_histogram(binwidth = 1) + ggtitle(title) + xlab('number of articles written') + ylab('number of writers')
+    ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle(title) + xlab('Number of Articles Written') + ylab('Number of Writers')
   
   print(section_articles_per_writer)
   }
@@ -91,7 +90,7 @@ for (num in 1:4) {
     filter(profile_id !=39 & profile_id !=176 & profile_id != 175) %>%
     group_by(profile_id) %>%
     summarise(total = n()) %>%
-    ggplot(aes(x = total)) + geom_histogram(binwidth = 1) + ggtitle(title) + xlab('number of articles written') + ylab('number of writers')
+    ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle(title) + xlab('Number of Articles Written') + ylab('Number of Writers')
   
   print(section_articles_per_writer)
 }
@@ -110,7 +109,7 @@ articles %>%
   summarise(yearDiff = max(yearPublished) - min(yearPublished)) %>%
   group_by(yearDiff) %>%
   summarise(n = n()) %>%
-  ggplot(aes(x = yearDiff)) + geom_line(aes(y=n)) + geom_point(aes(y=n))
+  ggplot(aes(x = yearDiff)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) + xlab('Number of Years Writing for TSL') + ylab('Number of Writers') + ggtitle('Writer Count by Number of Years Writing for TSL')
             
 # the above may be flawed, though, since people who maybe start writing in the spring
 # and quit at the end of the fall have written for a while, whereas people who 
@@ -130,28 +129,30 @@ retention = retention[!duplicated(retention[,6]),]
 retention %>%
   group_by(semestersTotal) %>%
   summarise(n = n()) %>%
-  ggplot(aes(x = semestersTotal)) + geom_line(aes(y=n)) + geom_point(aes(y=n))
+  ggplot(aes(x = semestersTotal)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) + xlab('Number of Semesters Writing for TSL') + ylab('Number of Writers') + ggtitle('Retention Rate of TSL Writers')
 
 # get info on the retention rate by section
 retention %>%
   filter(section_id != 5) %>%
   group_by(semestersTotal, section_id) %>%
   summarise(n = n()) %>%
-  ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="section", labels = c('News','Sports','Opinions','L&S')) + xlab('Number of Semesters Producing Content') + ylab('Number of Writers') + ggtitle('Retention Rate by Section')
+  ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="Section", labels = c('News','Sports','Opinions','L&S')) + xlab('Number of Semesters Writing for TSL') + ylab('Number of Writers') + ggtitle('Retention Rate by Section')
 
 # same thing, but x-axis is on a log scale now
 retention %>%
   filter(section_id != 5) %>%
   group_by(semestersTotal, section_id) %>%
   summarise(n = n()) %>%
-  ggplot(aes(x = log(semestersTotal), y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="section", labels = c('News','Sports','Opinions','L&S')) + xlab('log(Number of Semesters Producing Content)') + ylab('Number of Writers') + ggtitle('Retention Rate by Section')
+  ggplot(aes(x = log(semestersTotal), y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="Section", labels = c('News','Sports','Opinions','L&S')) + xlab('log(Number of Semesters Writing for TSL)') + ylab('Number of Writers') + ggtitle('Retention Rate by Section')
 
 # get info on most popular topic of all time
 
 # get info on most viewed pieces
-df <- read.csv('articles.csv')
-clicks <- df[,c(1,4)]
+clicks <- read.csv('articles.csv')
+clicks <- clicks[,c(1,4)]
+names(clicks) <- c('id','clicks')
 
+# most viewed articles (title, date published, writer, number of clicks)
 (articles %>%
   left_join(clicks, by = 'id') %>%
   arrange(desc(clicks)) %>%
@@ -167,10 +168,11 @@ clicks <- articles %>%
   arrange(clicks) %>%
   slice(1:10))[,c(2,4,7,12)]
 
-# interesting that they were all from the 11/6 issue. might be because
-# that time, the paper didn't print on time. so let's filter those out
+# interesting that they were all from the 12/4 issue. might be because
+# it was the last issue and nothing really happened (right after Thanksgiving break).
+# exclude those from the data
 (clicks %>%
-  filter(published_date != as.Date('2015-11-06')) %>%
+  filter(published_date != as.Date('2015-12-04')) %>%
   arrange(clicks) %>%
   slice(1:10))[,c(2,4,7,12)]
 
@@ -202,7 +204,6 @@ summary(aov(clicks ~ factor(section_id), clicks %>% filter(section_id!=5)))
   filter(section_id != 5) %>%
   group_by(author_name) %>%
   summarise(avg = mean(clicks), n=n()) %>%
-  filter(n>3) %>%
   arrange(desc(avg)) %>%
   slice(1:10))
 
@@ -223,7 +224,7 @@ summary(aov(clicks ~ factor(section_id), clicks %>% filter(section_id!=5)))
   arrange(avg) %>%
   slice(1:10))
 
-# again with repeat writers
+# again with repeat writers only
 (clicks %>%
   filter(section_id != 5) %>%
   group_by(author_name) %>%
