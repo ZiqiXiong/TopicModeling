@@ -49,7 +49,7 @@ topicgraph <- function(data, topic, topic.sig, divide) {
   
   ggplot(tempData, aes(x=published_date)) +
     geom_histogram(binwidth=divide,fill="#119CF9")+
-    scale_x_date(breaks="1 month",
+    scale_x_date(breaks="2 months",
                  labels=date_format("%Y-%b"),
                  limits=c(intrvl[1],intrvl[2])) +
     ylab("Frequency") + xlab("Year and Month") +
@@ -62,6 +62,12 @@ topicgraph2 <- function(data, topic, topic.sig=1, divide=7){
   tempData %>% ggvis(~published_date) %>% 
     layer_histograms(width=divide,fill:="119CF9",stroke :="119CF9") %>% add_axis("x",ticks=length(date_grid), grid=FALSE,
               properties=axis_props(labels=list(angle=90, fontSize = 8, align="left"))) 
+}
+
+authorChart2 <- function(articles, author, topic.sig){
+  works = dplyr::filter(articles,author_name==author)
+  works.by.topic = authorChartHelper(works,topic.sig)
+  ggplot(works.by.topic,aes(x=label,y=value))+geom_bar(stat='identity',aes(fill=label))
 }
 
 authorChart <- function(articles, author, topic.sig){

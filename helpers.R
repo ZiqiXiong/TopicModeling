@@ -56,7 +56,7 @@ classifyResult <- function(content,topic.model){
   topic.probs.table <- data.frame(Topic.ID=seq(1,length(topic.probs),1))
   topic.probs.table$Weight = as.numeric(t(topic.probs))
   topic.probs.table <- topic.probs.table[order(-topic.probs.table$Weight),]
-  result = topic.probs.table[1:5,]
+  result = topic.probs.table[1:3,]
   result
 }
 
