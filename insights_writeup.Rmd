@@ -1,0 +1,191 @@
+---
+title: "insights_writeup"
+author: "Benji Lu"
+date: "December 13, 2015"
+output: pdf_document
+---
+```{r message=FALSE, echo=FALSE}
+require(tidyr)
+require(dplyr)
+require(ggplot2)
+require(lubridate)
+require(gridExtra)
+source('helpers.R')
+```
+
+\subsection{Miscellaneous Insights}
+
+There's a lot to be learned from the data beyond the topic content analysis. For reference, here (again) is a glimpse of the data that we have on hand:
+
+```{r, echo=FALSE}
+articles <- readData()
+glimpse(articles)
+```
+
+With a little bit of wrangling and visualization, we were able to arrive at some interesting findings that might be of some value to the staff at *TSL*. For example, it's no secret that the newspaper struggles with retaining staff writers. But just how bad is it? By tracking the date of each writer's first published article and the writer's last published article, we were able to get a sense of how long they wrote for the paper.
+
+```{r}
+# break down date published into component parts, determine semester published
+articles <- articles %>%
+  mutate(yearPublished = year(published_date)) %>%
+  mutate(monthPublished = month(published_date)) %>%
+  mutate(dayPublished = day(published_date)) %>%
+  mutate(semester = ifelse(monthPublished < 6, 'spring', 'fall'))
+
+# calculate retention by semester for each writer
+retention <- articles %>%
+  group_by(profile_id) %>%
+  mutate(maxYear = max(yearPublished),
+         minYear = min(yearPublished),
+         semesterOff = ifelse(maxYear==yearPublished & semester=='fall','fall','spring'),
+         semesterJoin = ifelse(minYear==yearPublished & 
+         semester=='spring','spring','fall'),
+         semestersTotal = ifelse(semesterOff==semesterJoin,(maxYear-minYear)*2+1, 
+         (maxYear-minYear)*2))
+
+retention <- retention[!duplicated(retention[,6]),]
+```
+
+With the above, we were able to obtain the following graph:
+
+```{r}
+retention %>%
+  group_by(semestersTotal) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x = semestersTotal)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) +
+  xlab('Number of Semesters Writing for TSL') + ylab('Number of Writers') +
+  ggtitle('Retention Rate of TSL Writers')
+```
+
+It seems like *TSL*'s reputation for shedding writers isn't exaggerated. Out of the pool of writers over the past five years, 652 writers stay for one semester or less; 108 writers stay for two semesters; 40 stay for three; and 85 stay for four or more semesters. There are a few caveats, though. First, since the database only includes articles published within the last five years, it's possible that some writers who were seniors when the data first began being collected had been writing for *TSL* for many semesters but are represented as only writing for one semester because their earlier articles aren't included in the database. This might lead to an overestimate of the number of writers who only stay for one or two semesters. Second, the method we applied above to calculate retention reports the difference between the first semester they began writing for *TSL* and the last semester they wrote for *TSL*. Some writers, however, take a semester or more off from writing for *TSL* to study abroad or simply pursue other interests before returning to write again. In these cases, the number of semesters they spent writing for *TSL* are overestimated. These cases probably consistute only a small minority of the data points, however, so the overall trend still holds.
+
+We can easily track the retention rate by section as well:
+
+```{r}
+retention %>%
+  filter(section_id != 5) %>%
+  group_by(semestersTotal, section_id) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() +
+  geom_line() + scale_color_discrete(name="Section", labels =
+  c('News','Sports','Opinions','L&S')) + xlab('Number of Semesters Writing for TSL') +
+  ylab('Number of Writers') + ggtitle('Retention Rate by Section') +
+  scale_x_continuous(limits=c(1,13),breaks=seq(0,13,2))
+```
+
+Taking the log of the x-axis, we get:
+
+```{r}
+retention %>%
+  filter(section_id != 5) %>%
+  group_by(semestersTotal, section_id) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x = log(semestersTotal), y=n, color=factor(section_id))) + geom_point() +
+  geom_line() + scale_color_discrete(name="Section", labels =
+  c('News','Sports','Opinions','L&S')) +
+  xlab('log(Number of Semesters Writing for TSL)') + ylab('Number of Writers') + 
+  ggtitle('Retention Rate by Section')
+```
+
+It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. Unfortunately, we can't filter those writers out given the data that we have.
+
+Another area of interest might be how prolific writers for *TSL* are--that is, how many articles each writer writes. It seems pretty reasonable to expect that trend to resemble the retention rates shown above. After all, a person can only write so many articles if they're only a writer for one semester. And indeed, we can see that this is the case:
+
+```{r, echo=FALSE}
+articles <- readData()
+articles_per_writer <- articles %>%
+  group_by(profile_id) %>%
+  summarise(total = n())
+```
+```{r}
+articles_per_writer %>%
+  ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle('Histogram of Articles per Writer') + xlab('Number of Articles Written') + ylab('Number of Writers')
+```
+
+We can also break it down by section:
+
+```{r}
+sections = c('News','LS','Opinions','Sports')
+for (num in 1:4) {
+  section <- sections[num]
+  assign(paste(section, 'section_articles_per_writer', sep='_'), articles %>%
+    filter(section_id == num) %>%
+    group_by(profile_id) %>%
+    summarise(total = n()) %>%
+    ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle(section) + xlab('Number of Articles Written') + ylab('Number of Writers'))
+}
+grid.arrange(News_section_articles_per_writer,Opinions_section_articles_per_writer,LS_section_articles_per_writer,Sports_section_articles_per_writer, ncol=2)
+```
+It does seem, though, like there are a few especially prolific writers. We can isolate them to see who they are:
+
+```{r, echo=FALSE, results='hide'}
+# view top writers
+sort(articles_per_writer$total)
+```
+```{r, echo=FALSE, results='hide'}
+row(articles_per_writer)[articles_per_writer[,2]==68]
+articles_per_writer[69,]$profile_id
+```
+```{r, echo=FALSE}
+# First place: Wes Haas
+as.character((articles %>%
+   filter(profile_id==81))[1,]$author_name)
+(articles %>%
+  filter(profile_id==81))[c(1:10),c(2,4)]
+```
+```{r, echo=FALSE, results='hide'}
+row(articles_per_writer)[articles_per_writer[,2]==64]
+articles_per_writer[34,]$profile_id
+```
+```{r, echo=FALSE}
+# Second place: Editorial Board
+as.character((top_writer = articles %>%
+  filter(profile_id==39))[1,]$author_name)
+(articles %>%
+  filter(profile_id==39))[c(1:10),c(2,4)]
+```
+```{r, echo=FALSE, results='hide'}
+row(articles_per_writer)[articles_per_writer[,2]==61]
+articles_per_writer[148,]$profile_id
+```
+```{r, echo=FALSE}
+# Third place: Editorial Board
+as.character((top_writer = articles %>%
+  filter(profile_id==176))[1,]$author_name)
+(articles %>%
+  filter(profile_id==176))[c(1:10),c(2,4)]
+```
+```{r, echo=FALSE, results='hide'}
+row(articles_per_writer)[articles_per_writer[,2]==57]
+articles_per_writer[88,]$profile_id
+```
+```{r, echo=FALSE}
+# Fourth Place: Tim Taylor
+as.character((top_writer = articles %>%
+  filter(profile_id==103))[1,]$author_name)
+(articles %>%
+  filter(profile_id==103))[c(1:10),c(2,4)]
+```
+```{r, echo=FALSE, results='hide'}
+row(articles_per_writer)[articles_per_writer[,2]==51]
+articles_per_writer[147,]$profile_id
+```
+```{r, echo=FALSE}
+# Fifth Place: The Student Life Staff
+as.character((top_writer = articles %>%
+  filter(profile_id==175))[1,]$author_name)
+(articles %>%
+  filter(profile_id==175))[c(1:10),c(2,4)]
+```
+```{r, echo=FALSE, results='hide'}
+row(articles_per_writer)[articles_per_writer[,2]==48]
+articles_per_writer[562,]$profile_id
+```
+```{r, echo=FALSE}
+# Sixth Place: Nachi Baru
+as.character((top_writer = articles %>%
+  filter(profile_id==634))[1,]$author_name)
+(articles %>%
+  filter(profile_id==634))[c(1:10),c(2,4)]
+```
+

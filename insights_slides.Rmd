@@ -1,3 +1,10 @@
+---
+title: "TSL Topic Analysis: Insights"
+author: "Benji Lu, Kai Fukutaki, Ziqi Xiong"
+date: "December 12, 2015"
+output: ioslides_presentation
+---
+```{r, echo=FALSE, message=FALSE}
 require(tidyr)
 require(dplyr)
 require(ggplot2)
@@ -7,8 +14,9 @@ source('helpers.R')
 
 # load articles
 articles <- readData()
-
-### ARTICLES PER WRITER ###
+```
+## Overall Articles Per Writer
+```{r, echo=FALSE}
 # get dataframe of number of articles written by each unique writer
 articles_per_writer = articles %>%
   group_by(profile_id) %>%
@@ -16,105 +24,112 @@ articles_per_writer = articles %>%
 
 # histogram of how many different pieces writers have written
 articles_per_writer %>%
-  ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle('Histogram of Articles per Writer') + xlab('Number of Articles Written') + ylab('Number of Writers')
+  ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle('Histogram of Article Count by Writer') + xlab('Number of Articles Written') + ylab('Number of Writers')
+```
 
+## Articles Per Writer by Section
+
+```{r, echo=FALSE, fig.width=8.5, fig.height=6}
 # important to note in the above that at least some of the counts include guest
 # writers for opinions pieces who only write one or maybe a few pieces in their
 # time in Claremont
+
 # CHECK THE ORDERING OF THE SECTIONS TO MAKE SURE IT'S RIGHT
 sections = c('News','LS','Opinions','Sports')
 for (num in 1:4) {
   section <- sections[num]
   assign(paste(section, 'section_articles_per_writer', sep='_'), articles %>%
-           filter(section_id == num) %>%
-           group_by(profile_id) %>%
-           summarise(total = n()) %>%
-           ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle(section) + xlab('Number of Articles Written') + ylab('Number of Writers'))
-}
-grid.arrange(News_section_articles_per_writer,Opinions_section_articles_per_writer,LS_section_articles_per_writer,Sports_section_articles_per_writer, ncol=2)
-
-### TOP WRITER ###
-# get top writer
-sort(articles_per_writer$total)
-
-# Wes Haas PO '14
-row(articles_per_writer)[articles_per_writer[,2]==68]
-articles_per_writer[69,]$profile_id
-top_writer = articles %>%
-  filter(profile_id==81) %>%
-  View()
-
-# Editorial Board
-row(articles_per_writer)[articles_per_writer[,2]==64]
-articles_per_writer[34,]$profile_id
-top_writer = articles %>%
-  filter(profile_id==39) %>%
-  View()
-
-# Editorial Board
-row(articles_per_writer)[articles_per_writer[,2]==61]
-articles_per_writer[148,]$profile_id
-top_writer = articles %>%
-  filter(profile_id==176) %>%
-  View()
-
-# Tim Taylor
-row(articles_per_writer)[articles_per_writer[,2]==57]
-articles_per_writer[88,]$profile_id
-top_writer = articles %>%
-  filter(profile_id==103) %>%
-  View()
-
-# The Student Life Staff
-row(articles_per_writer)[articles_per_writer[,2]==51]
-articles_per_writer[147,]$profile_id
-top_writer = articles %>%
-  filter(profile_id==175) %>%
-  View()
-
-# Nachi Baru PO '17 (sports)
-row(articles_per_writer)[articles_per_writer[,2]==48]
-articles_per_writer[562,]$profile_id
-top_writer = articles %>%
-  filter(profile_id==634) %>%
-  View()
-
-### REGRAPH IN LIGHT OF THE ABOVE ###
-sections = c('News','L&S','Ops','Sports')
-for (num in 1:4) {
-  section <- sections[num]
-  title <- paste('Histogram of', bquote(.(section)), 'Articles per Writer')
-  section_articles_per_writer = articles %>%
     filter(section_id == num) %>%
-    filter(profile_id !=39 & profile_id !=176 & profile_id != 175) %>%
     group_by(profile_id) %>%
     summarise(total = n()) %>%
-    ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle(title) + xlab('Number of Articles Written') + ylab('Number of Writers')
-  
-  print(section_articles_per_writer)
+    ggplot(aes(x = total)) + geom_histogram(binwidth = 1, col=I('gray')) + ggtitle(section) + xlab('Number of Articles Written') + ylab('Number of Writers'))
 }
+grid.arrange(News_section_articles_per_writer,Opinions_section_articles_per_writer,LS_section_articles_per_writer,Sports_section_articles_per_writer, ncol=2)
+```
 
-### RETENTION RATE ###
-# break down date published into component parts, determine semester published
+## Top Writers
+
+## Wes Haas
+```{r, echo=FALSE, results='hide'}
+# get top writer
+sort(articles_per_writer$total)
+row(articles_per_writer)[articles_per_writer[,2]==68]
+articles_per_writer[69,]$profile_id
+```
+```{r, echo=FALSE}
+# Wes Haas PO '14
+(articles %>%
+  filter(profile_id==81))[c(1:10),c(2,4)]
+```
+
+## Editorial Board {.smaller}
+```{r, echo=FALSE, results='hide'}
+# get top writer
+row(articles_per_writer)[articles_per_writer[,2]==64]
+articles_per_writer[34,]$profile_id
+```
+```{r, echo=FALSE}
+# FIGURE OUT HOW TO MAKE PUBLISHED DATE TWO COLUMNS ON THE BOTTOM TO AVOID CUTOFF
+(articles %>%
+  filter(profile_id==39))[c(1:10),c(2,4)]
+```
+
+## Editorial Board {.smaller}
+```{r, echo=FALSE, results='hide'}
+# get top writer
+row(articles_per_writer)[articles_per_writer[,2]==61]
+articles_per_writer[148,]$profile_id
+```
+```{r echo=FALSE}
+# FIGURE OUT HOW TO MAKE PUBLISHED DATE TWO COLUMNS ON THE BOTTOM TO AVOID CUTOFF
+(articles %>%
+  filter(profile_id==176))[c(1:10),c(2,4)]
+```
+
+## Tim Taylor {.smaller}
+```{r, echo=FALSE, results='hide'}
+# get top writer
+row(articles_per_writer)[articles_per_writer[,2]==57]
+articles_per_writer[88,]$profile_id
+```
+```{r, echo=FALSE}
+# FIGURE OUT HOW TO MAKE PUBLISHED DATE TWO COLUMNS ON THE BOTTOM TO AVOID CUTOFF
+(articles %>%
+  filter(profile_id==103))[c(1:10),c(2,4)]
+```
+
+## The Student Life Staff {.smaller}
+```{r, echo=FALSE, results='hide'}
+# get top writer
+row(articles_per_writer)[articles_per_writer[,2]==51]
+articles_per_writer[147,]$profile_id
+```
+```{r, echo=FALSE}
+# FIGURE OUT HOW TO MAKE PUBLISHED DATE TWO COLUMNS ON THE BOTTOM TO AVOID CUTOFF
+(articles %>%
+  filter(profile_id==175))[c(1:10),c(2,4)]
+```
+
+## Nachi Baru {.smaller}
+```{r, echo=FALSE, results='hide'}
+# get top writer
+row(articles_per_writer)[articles_per_writer[,2]==48]
+articles_per_writer[562,]$profile_id
+```
+```{r, echo=FALSE}
+# FIGURE OUT HOW TO MAKE PUBLISHED DATE TWO COLUMNS ON THE BOTTOM TO AVOID CUTOFF
+(articles %>%
+  filter(profile_id==634))[c(1:10),c(2,4)]
+```
+
+## Retention Rate
+```{r, echo=FALSE, results='hide'}
 articles = articles %>%
   mutate(yearPublished = year(published_date)) %>%
   mutate(monthPublished = month(published_date)) %>%
   mutate(dayPublished = day(published_date)) %>%
   mutate(semester = ifelse(monthPublished < 6, 'spring', 'fall'))
 
-# plot retention rate by year
-articles %>%
-  group_by(profile_id) %>%
-  summarise(yearDiff = max(yearPublished) - min(yearPublished)) %>%
-  group_by(yearDiff) %>%
-  summarise(n = n()) %>%
-  ggplot(aes(x = yearDiff)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) + xlab('Number of Years Writing for TSL') + ylab('Number of Writers') + ggtitle('Writer Count by Number of Years Writing for TSL')
-            
-# the above may be flawed, though, since people who maybe start writing in the spring
-# and quit at the end of the fall have written for a while, whereas people who 
-# start and quit in the fall don't write as much
-
-# plot retention rate by semester
 retention = articles %>%
   group_by(profile_id) %>%
   mutate(maxYear = max(yearPublished),
@@ -124,30 +139,37 @@ retention = articles %>%
          semestersTotal = ifelse(semesterOff==semesterJoin,(maxYear-minYear)*2+1, (maxYear-minYear)*2))
 
 retention = retention[!duplicated(retention[,6]),]
-
-# FIX X-AXIS INTERVALS
+```
+```{r, echo=FALSE}
 retention %>%
   group_by(semestersTotal) %>%
   summarise(n = n()) %>%
   ggplot(aes(x = semestersTotal)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) + xlab('Number of Semesters Writing for TSL') + ylab('Number of Writers') + ggtitle('Retention Rate of TSL Writers')
+```
 
-# get info on the retention rate by section
+## Retention Rate by Section
+```{r, echo=FALSE}
+# FIX X-AXIS INTERVAL
 retention %>%
   filter(section_id != 5) %>%
   group_by(semestersTotal, section_id) %>%
   summarise(n = n()) %>%
-  ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="Section", labels = c('News','Sports','Opinions','L&S')) + xlab('Number of Semesters Writing for TSL') + ylab('Number of Writers') + ggtitle('Retention Rate by Section') + scale_x_continuous(limits=c(1,13),breaks=seq(0,13,2))
+  ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="Section", labels = c('News','Sports','Opinions','L&S')) + xlab('Number of Semesters Writing for TSL') + ylab('Number of Writers') + ggtitle('Retention Rate by Section')
+```
 
-# same thing, but x-axis is on a log scale now
+## Retention Rate by Section (log)
+```{r, echo=FALSE}
 retention %>%
   filter(section_id != 5) %>%
   group_by(semestersTotal, section_id) %>%
   summarise(n = n()) %>%
   ggplot(aes(x = log(semestersTotal), y=n, color=factor(section_id))) + geom_point() + geom_line() + scale_color_discrete(name="Section", labels = c('News','Sports','Opinions','L&S')) + xlab('log(Number of Semesters Writing for TSL)') + ylab('Number of Writers') + ggtitle('Retention Rate by Section')
+```
 
-# get info on most popular topic of all time
+## Article Views
 
-# get info on most viewed pieces
+## Most-Viewed Articles (Fall 2015) {.smaller}
+```{r, echo=FALSE}
 clicks <- read.csv('articles.csv')
 clicks <- clicks[,c(1,4)]
 names(clicks) <- c('id','clicks')
@@ -157,8 +179,10 @@ names(clicks) <- c('id','clicks')
   left_join(clicks, by = 'id') %>%
   arrange(desc(clicks)) %>%
   slice(1:10))[,c(2,4,7,12)]
+```
 
-# for convenience, since from now on we'll be filtering fall 2015 only
+## Least-Viewed Articles (Fall 2015) {.smaller}
+```{r, echo=FALSE}
 clicks <- articles %>%
   filter(yearPublished == 2015 & semester == 'fall') %>%
   left_join(clicks, by = 'id')
@@ -170,67 +194,93 @@ clicks <- articles %>%
 
 # interesting that they were all from the 12/4 issue. might be because
 # it was the last issue and nothing really happened (right after Thanksgiving break).
+```
+
+## Least-Viewed Articles (Fall 2015) {.smaller}
+```{r, echo=FALSE}
 # exclude those from the data
 (clicks %>%
   filter(published_date != as.Date('2015-12-04')) %>%
   arrange(clicks) %>%
   slice(1:10))[,c(2,4,7,12)]
+```
 
+## Summary of Article Views (Fall 2015)
+```{r, echo=FALSE}
 # plot distribution of views in fall 2015
 clicks %>%
   ggplot(aes(x = semester, y = clicks)) + geom_boxplot() + xlab('Semester') + ylab('Cumulative Number of Clicks') + ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
 
+# some huge outliers
+```
+
+## Summary of Article Views (Fall 2015)
+```{r, echo=FALSE, warning=FALSE}
 # exclude outliers from view
 clicks %>%
   ggplot(aes(x = semester, y = clicks)) + geom_boxplot() + scale_y_continuous(limits = c(0,500)) + xlab('Semester') + ylab('Cumulative Number of Clicks') + ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
+```
 
+## Summary of Article Views by Section (Fall 2015)
+```{r, echo=FALSE}
 # do the same but by section
 clicks %>%
   filter(section_id != 5) %>%
   mutate(section = ifelse(section_id==1, 'News', ifelse(section_id==2, 'Sports', ifelse(section_id==3, 'Opinions', 'L&S')))) %>%
   ggplot(aes(x = factor(section), y = clicks)) + geom_boxplot() + xlab('Section') + ylab('Cumulative Number of Clicks') + ggtitle('Distribution of Clicks by Section of TSL Fall 2015 Articles')
+```
 
+## Summary of Article Views by Section (Fall 2015)
+```{r, echo=FALSE, warning=FALSE}
 # exclude outliers from view
 clicks %>%
   filter(section_id != 5) %>%
   mutate(section = ifelse(section_id==1, 'News', ifelse(section_id==2, 'Sports', ifelse(section_id==3, 'Opinions', 'L&S')))) %>%
   ggplot(aes(x = factor(section), y = clicks)) + geom_boxplot() + scale_y_continuous(limits = c(0,1250)) + xlab('Section') + ylab('Cumulative Number of Clicks') + ggtitle('Distribution of Clicks by Section of TSL Fall 2015 Articles')
+```
 
-# statistical analysis of clicks by section
-summary(aov(clicks ~ factor(section_id), clicks %>% filter(section_id!=5)))
-
+## Most-Viewed Writers (Average) (Fall 2015)
+```{r, echo=FALSE}
 # we can try to identify the most clicked writers on average
 (clicks %>%
   filter(section_id != 5) %>%
   group_by(author_name) %>%
-  summarise(avg = mean(clicks), n=n()) %>%
-  arrange(desc(avg)) %>%
+  summarise(average_views = mean(clicks), articles_published=n()) %>%
+  arrange(desc(average_views)) %>%
   slice(1:10))
+```
 
-# a lot of these are one-hit pieces. let's see among the more consistent writers
+## Most-Viewed Consistent Writers (Average) (Fall 2015)
+```{r, echo=FALSE}
+# a lot of the above are one-hit pieces. let's see among the more consistent writers
 (clicks %>%
   filter(section_id != 5) %>%
   group_by(author_name) %>%
-  summarise(avg = mean(clicks), n=n()) %>%
-  filter(n>3) %>%
-  arrange(desc(avg)) %>%
+  summarise(average_views = mean(clicks), articles_published=n()) %>%
+  filter(articles_published>3) %>%
+  arrange(desc(average_views)) %>%
   slice(1:10))
+```
 
+## Least-Viewed Writers (Average) (Fall 2015)
+```{r, echo=FALSE}
 # same but for least clicked writers on average
 (clicks %>%
   filter(section_id != 5) %>%
   group_by(author_name) %>%
-  summarise(avg = mean(clicks), n=n()) %>%
-  arrange(avg) %>%
+  summarise(average_views = mean(clicks), articles_published=n()) %>%
+  arrange(average_views) %>%
   slice(1:10))
+```
 
+## Least-Viewed Consistent Writers (Average) (Fall 2015)
+```{r, echo=FALSE}
 # again with repeat writers only
 (clicks %>%
   filter(section_id != 5) %>%
   group_by(author_name) %>%
-  summarise(avg = mean(clicks), n=n()) %>%
-  filter(n>3) %>%
-  arrange(avg) %>%
+  summarise(average_views = mean(clicks), articles_published=n()) %>%
+  filter(articles_published>3) %>%
+  arrange(average_views) %>%
   slice(1:10))
-
-# most mentioned people/groups/names in TSL articles
+```
