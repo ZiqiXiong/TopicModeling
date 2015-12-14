@@ -150,30 +150,53 @@ After categorizing each article into its related topics, we are able to plot the
 
 As we can see from the plot, the frequency of topic 31 experienced an unprecedented spike during the 2015 Fall semester, which reflects the heated discussion on the series of college protests in Yale, Mizzou and Claremont McKenna this fall.
 
-We can also visualize what topics each author writes about. 
+We can also visualize what topics each author writes about. Take TSL editorial board for example: 
 
 \begin{Schunk}
 \begin{Sinput}
-> print(authorChart(articles,'Editorial Board',2))
+> print(authorChart2(articles,'Editorial Board',2))
+> topic.terms[1:10,c(10,19)]
 \end{Sinput}
+\begin{Soutput}
+      Topic 10   Topic 19 
+ [1,] "student"  "write"  
+ [2,] "discuss"  "book"   
+ [3,] "issu"     "read"   
+ [4,] "chang"    "stori"  
+ [5,] "talk"     "articl" 
+ [6,] "question" "tsl"    
+ [7,] "campus"   "news"   
+ [8,] "import"   "writer" 
+ [9,] "pomona"   "media"  
+[10,] "colleg"   "publish"
+\end{Soutput}
 \end{Schunk}
 \includegraphics{FinalProject-006}
 
+The plot shows that TSL editorial board writes most about topic 10 about student discussions and topic 19 about campus media, which are indeed what editors typically voice their opinions about. 
 
 \section{Findings}
 
 \subsection{Topic Analysis}
 
+
 \subsection{Miscellaneous Insights}
 
+\section{End Product}
+This project is not only about gaining insights into student discourse, but also about creating an infrastructural tool that allows other interested students to find answers to their own questions about our history. With that goal in mind, we created an interactive shiny app that can respond to users' queries on different topics, authors and articles and then generate plots or perform analyses similar to those in this report. The app is online at \href{https://ziqixiong.shinyapps.io/TopicAnalysis}{https://ziqixiong.shinyapps.io/TopicAnalysis}.
+\vspace{1cm}
+
+\includegraphics[width=300px]{shinydemo.png}
+
 \section{Conclusion}
+
+\subsection{Summary}
 Through topic analysis of the corpus of \textit{TSL} articles over the past five years, we were able to track how much coverage various subjects received in \textit{TSL} over time. From this, a rough idea of how these topics have been trending over time can be ascertained. For example, from our model we infer that [insert example].
 
-However, our model faces several limitations, regarding both its analysis of topic coverage in \textit{TSL} and the inferences that can reasonably be drawn from its findings. Some of the topics generated through the model creation process are not very useful. For example, there are a few scattered `` Miscellaneous''  topics that have no logical continuity between the articles. The key words used for these miscellaneous topics have little relation to each other. This is due to [Kai: ZQ might need to go into more technical detail here about why the model will sometimes generate nonsensical topics]. For some numbers of topics, a topic based around weird punctuation or symbols that a few authors use is generated, since these are counted as distinctive words. Sometimes, topics are also combined, as is the case with `` Campus Activism''  combining both the divestment action and the action around the campus worker rights in 2012. [Benji: I can't speak as much to the limitations in Latent Dirichlet Allocation, so I'll talk about the inferences and someone else can fill in here.]
+\subsection{Limitations}
+Our model faces several limitations, regarding both its analysis of topic coverage in \textit{TSL} and the inferences that can reasonably be drawn from its findings. Some of the topics generated through the model creation process are not very useful. For example, there are a few scattered `` Miscellaneous''  topics that have no logical continuity between the articles. The key words used for these miscellaneous topics have little relation to each other. This is bound to happen sometimes, as LDA is an unsupervised method, so we should not necessarily expect it to always find groups that make sense to us. For some numbers of topics, a topic based around weird punctuation or symbols that a few authors use is generated, since these are counted as distinctive words. Sometimes, topics are also combined, as is the case with `` Campus Activism''  combining both the divestment action and the action around the campus worker rights in 2012. On the whole, LDA produced topics that were sensible and comprehensible, ranging from "Running" to "Fashion." In the 40 Topic model, for instance, there was only one "Miscellaneous" topic and one "NA" topic (which was due to the weird symbols used by a few authors). This means that 38/40 topics were useful, which is a very good proportion for an unsupervised method. As with all tools, it is useful so long as the shortcomings are kept in mind.
 
-Latent Dirichlet Allocation is an unsupervised 
-
-The model could also be improved to enable users to obtain a more accurate understanding of how the prominence of topics in campus discourse has changed over time. Perhaps most obviously, the frequency with which a \textit{TSL} article is visited online over a certain period of time likely is significant indicator of the prominence of the article's main topic during that period of time. Currently, the model does not include such information because the number of visitors was not tracked until this semester. As a result, certain topics are represented by the model as more prominent in campus discourse than perhaps they truly were. For example, our model produces three or four topics that are all essentially athletics. Moreover, since the sports section consistently covers sports events at the Claremont Colleges every issue of the newspaper, the model's visualization shows a consistently moderate number of \textit{TSL} articles covering sports, giving the impression that sports figure relatively prominently in the collective campus conscious. Without prior knowledge of our campus culture, it might be easy for someone to draw such an inference, when in fact athletics has a relatively modest place in campus dialogue. The frequency of visitors to each article would provide a different perspective: As shown in Section 4.2, sports articles generally had fewer online visitors than news and opinions articles this semester, and certain pieces related to race-based issues and Pomona branding received the most visitors. These data points are likely more consistent with the nature of campus discourse this past semester. If the model accounted for this type of information in its visualizations, it would present a more accurate picture of how topics trend over time.
-
+\subsection{Future Work}
+The model could also be improved to enable users to obtain a more accurate understanding of how the prominence of topics in campus discourse has changed over time. Perhaps most obviously, the frequency with which a \textit{TSL} article is visited online over a certain period of time likely is significant indicator of the prominence of the article's main topic during that period of time. Currently, the model does not include such information because the number of visitors was not tracked until this semester. As a result, certain topics are represented by the model as more prominent in campus discourse than perhaps they truly were. For example, our model produces three or four topics that are all essentially athletics. Moreover, since the sports section consistently covers sports events at the Claremont Colleges every issue of the newspaper, the model's visualization shows a consistently moderate number of \textit{TSL} articles covering sports, giving the impression that sports figure relatively prominently in the collective campus conscious. Without prior knowledge of our campus culture, it might be easy for someone to draw such an inference, when in fact athletics has a relatively modest place in campus dialogue. The frequency of visitors to each article would provide a different perspective: As shown in Section 4.2, sports articles generally had fewer online visitors than news and opinions articles this semester, and certain pieces related to race-based issues and Pomona branding received the most visitors. These data points are likely more consistent with the nature of campus discourse this past semester. If the model accounted for this type of information in its visualizations, it would present a more accurate picture of how topics trend over time. Finally, if it would be possible to obtain and convert data on articles before 2009 into a usable format, this could obviously grant more ability to perform historical analysis.
 
 \end{document}

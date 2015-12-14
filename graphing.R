@@ -67,7 +67,8 @@ topicgraph2 <- function(data, topic, topic.sig=1, divide=7){
 authorChart2 <- function(articles, author, topic.sig){
   works = dplyr::filter(articles,author_name==author)
   works.by.topic = authorChartHelper(works,topic.sig)
-  ggplot(works.by.topic,aes(x=label,y=value))+geom_bar(stat='identity',aes(fill=label))
+  ggplot(works.by.topic,aes(x=label,y=value))+geom_bar(stat='identity',aes(fill=label)) +
+    ylab("Frequency") + xlab("Topics")
 }
 
 authorChart <- function(articles, author, topic.sig){

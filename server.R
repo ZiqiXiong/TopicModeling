@@ -99,7 +99,7 @@ shinyServer(function(input, output,session) {
   reactive({
     topicgraph2(joined.articles(),input$graph.topic.id,2,7) %>%
       add_tooltip(tooltipFunc, 'hover') %>%
-    set_options(width = 1200, height = 800)
+    set_options(width = 1000, height = 550)
   }) %>% bind_shiny("p")
   
   
