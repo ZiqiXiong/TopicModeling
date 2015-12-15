@@ -31,18 +31,18 @@ articles = join.articles.with.topics(articles,topic.model,3)
 
 
 \section{Motivation}
-They say that those who do not know history are doomed to repeat it. We hope to show how campus dialogue on the Claremont Colleges has changed over time, using articles from The Student Life as representative of the discourse surrounding hot-button issues on campus. The Student Life, or TSL, is the oldest college newspaper in Southern California, and it is student-written and managed. It thus serves as a good glimpse into the thoughts and discourse of the students of the 5 Claremont Colleges (Pomona, Claremont McKenna, Scripps, Pitzer, Harvey Mudd). The student population itself is in a constant state of flux, as students generally spend only 4-5 years on campus. This ever changing population, and thus ever changing set of TSL writers (especially given that writers are probably working for TSL during their whole time on campus), means that issues in campus dialogue can repeatedly resurface when current students are not aware of the college discussions that took place four or five years ago. Plus, TSL does not have a `` static''  format; the number of articles published in each issue depends on the number of articles written, rather than publishing the same length paper each week. This allows for interesting data on word usage trends, topics covered, authorship, and more over time. How are topics evolving over time? Can we see major spikes in certain topics/phrases and trace those back to major events? Can we use these trends to inform our current dialogue? With better, more easily accessible information on TSL history, we can make it easier for future students to see what kind of discussion and action has taken place at the Claremont Colleges so that they can better understand the history of intellectual conversations on our campus and create fresher, deeper discussions in the future.
+They say that those who do not know history are doomed to repeat it. We hope to show how campus dialogue on the Claremont Colleges has changed over time, using articles from The Student Life as representative of the discourse surrounding hot-button issues on campus. \textit{The Student Life}, or \textit{TSL}, is the oldest college newspaper in Southern California, and it is student-written and managed. It thus serves as a good glimpse into the thoughts and discourse of the students of the 5 Claremont Colleges (Pomona, Claremont McKenna, Scripps, Pitzer, Harvey Mudd). The student population itself is in a constant state of flux, as students generally spend only 4-5 years on campus. This ever changing population, and thus ever changing set of \textit{TSL} writers (especially given that writers are probably working for \textit{TSL} during their whole time on campus), means that issues in campus dialogue can repeatedly resurface when current students are not aware of the college discussions that took place four or five years ago. Plus, \textit{TSL} does not have a `` static''  format; the number of articles published in each issue depends on the number of articles written, rather than publishing the same length paper each week. This allows for interesting data on word usage trends, topics covered, authorship, and more over time. How are topics evolving over time? Can we see major spikes in certain topics/phrases and trace those back to major events? Can we use these trends to inform our current dialogue? With better, more easily accessible information on \textit{TSL} history, we can make it easier for future students to see what kind of discussion and action has taken place at the Claremont Colleges so that they can better understand the history of intellectual conversations on our campus and create fresher, deeper discussions in the future.
 
 \section{Methodology}
 
 \subsection{Data Source}
 
-Our raw data was acquired directly from TSL's SQL database on ASPC peninsula server. The data is in the format of three csv tables: 
+Our raw data was acquired directly from \textit{TSL}'s SQL database on ASPC peninsula server. The data is in the format of three csv tables: 
 
 \begin{enumerate}
-\item \textbf{articles}: This table contains the information related to the TSL articles, including id, title, content, status (published or not), created date, published date, updated date, section id and issue id.
-\item \textbf{profiles}: This table contains the information related to the TSL staff, including id, name and position.
-\item \textbf{articles\_profiles}: This table contains the authorship of TSL articles. Each row contains a TSL staff member id and an article id.
+\item \textbf{articles}: This table contains the information related to the \textit{TSL} articles, including id, title, content, status (published or not), created date, published date, updated date, section id and issue id.
+\item \textbf{profiles}: This table contains the information related to the \textit{TSL} staff, including id, name and position.
+\item \textbf{articles\_profiles}: This table contains the authorship of \textit{TSL} articles. Each row contains a \textit{TSL} staff member id and an article id.
 \end{enumerate}
 
 We joined the three tables by article\_id and profile\_id and filtered out all the articles that are not published, do not have enough content (body text less than 50 words), or miss author or published date information. We selected important variables including title, content, published date, and author's name for our analysis.
@@ -51,9 +51,9 @@ To access the data we used, visit our code repository at \href{https://github.co
 
 \subsection{Model Training}
 
-Our goal is to build an unsupervised model that cluster the TSL articles by their similarity in word usage so that each cluster can be labeled later and studied as a topic. With that goal in mind, we studied and used Latent Dirichlet Allocation(LDA) developed by Andrew Ng, et al., in 2003 for our project. LDA is a probabilistic model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. When applied to a collection of text documents, LDA views each document as a mixture of a small number of topics and each word generated by one of the document's topics. With different inference techniques such as Gibbs Sampling, LDA is able to learn the composition of each topic (its associated word probabilities) and the topic mixture of each document.\footnote{``Latent Dirichlet Allocation'', Andrew Ng, et al., \href{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}}
+Our goal is to build an unsupervised model that cluster the \textit{TSL} articles by their similarity in word usage so that each cluster can be labeled later and studied as a topic. With that goal in mind, we studied and used Latent Dirichlet Allocation(LDA) developed by Andrew Ng, et al., in 2003 for our project. LDA is a probabilistic model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. When applied to a collection of text documents, LDA views each document as a mixture of a small number of topics and each word generated by one of the document's topics. With different inference techniques such as Gibbs Sampling, LDA is able to learn the composition of each topic (its associated word probabilities) and the topic mixture of each document.\footnote{``Latent Dirichlet Allocation'', Andrew Ng, et al., \href{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}}
 
-Before training our LDA model, we first processed the body text of TSL articles by converting all words to lower case and reducing words to their stems, so that a group of words such as `` study'' ,`` Study''  and `` studies''  can be treated as one. We also removed punctuation, stop words (the most common, short function words), and extremely rare words that would only add noise to our model training. Finally, we transformed the collection of articles into a document-term matrix with each row representing an article and column representing a word. 
+Before training our LDA model, we first processed the body text of \textit{TSL} articles by converting all words to lower case and reducing words to their stems, so that a group of words such as `` study'' ,`` Study''  and `` studies''  can be treated as one. We also removed punctuation, stop words (the most common, short function words), and extremely rare words that would only add noise to our model training. Finally, we transformed the collection of articles into a document-term matrix with each row representing an article and column representing a word. 
 
 By using the R package `` topicmodel'', We trained multiple LDA models with different numbers of topics as input, including 25, 30, 35, 40, 45 and 50, so that we can use the most suitable model in our analysis later depending on how general we want the topics to be.
 
@@ -69,7 +69,7 @@ topic.terms[1:5,sample(40,5)]
 
 The 5 topics can be easily identified as ``music'', ``sex'', ``campus event'', ``student protest'', and ``sports game'' by their top keywords.
 
-In addition to the distribution of words in topics, the LDA model can also calculates the percentage of a topic in an article and infers what the article is about. Take five random TSL articles for example:
+In addition to the distribution of words in topics, the LDA model can also calculates the percentage of a topic in an article and infers what the article is about. Take five random \textit{TSL} articles for example:
 
 <<>>=
 set.seed(37)
@@ -83,7 +83,7 @@ topic.terms[1:5, sample.articles[['primary.topic']]]
 
 As we can see from the result above, ``Women's Basketball Struggles Through Tough First Games'' is categorized into topic 1 about team sports, ``Peace, Popular Opinion, and the Prisoner Exchange'' into topic 16 about national politics, ``Panel at CMC Debates Approach to Syria Conflict'' into topic 10 about student discussion, `` Students Put Out Fire in Scripps Dorm'' into topic 34 about residential life, and ``Ye Olde TSL: 1927, The First Year of the Sponsor Group'' into topic 27 about Pomona sponsor program. 
 
-Our model can also discover topics in articles that are not in our TSL dataset. For example, it can successfully categorize an 108-word excerpt from Martin Luther King's speech ``I Have a Dream'' into topic 16 about national politics and topic 31 about student protest.
+Our model can also discover topics in articles that are not in our \textit{TSL} dataset. For example, it can successfully categorize an 108-word excerpt from Martin Luther King's speech ``I Have a Dream'' into topic 16 about national politics and topic 31 about student protest.
 
 <<>>=
 test.paragraph = "I have a dream that one day on the red hills of Georgia, 
@@ -119,7 +119,7 @@ topic.terms[1:10,c(33,10)]
 
 Here, we highlight some interesting findings that we discovered through our topic analysis, beginning with topic trends.
 
-Two prominent movements in the recent history of the Claremont Colleges are the divestment campaign and the push for the unionization of the Pomona's dining hall workers. Using our model's visualizations of topics over time, we found the following trend of \textit{TSL}'s coverage of the two topics:
+Two prominent movements in the recent history of the Claremont Colleges are the divestment campaign and the push for the unionization of the Pomona's dining hall workers.\footnote{\href{http://www.pomona.edu/news/2013/09/25-divestment-decision}{pomona.edu/news/2013/09/25-divestment-decision}}\footnote{\href{http://www.dailykos.com/story/2014/5/4/1296249/Rethink-Divestment-5-1-2014-Pomona-College}{dailykos.com/story/2014/5/4/1296249/Rethink-Divestment-5-1-2014-Pomona-College}}\footnote{\href{http://www.latimes.com/opinion/op-ed/la-oe-morrison-gould-20141021-column.html}{latimes.com/opinion/op-ed/la-oe-morrison-gould-20141021-column.html}}\footnote{\href{http://www.nytimes.com/2012/02/02/us/after-workers-are-fired-an-immigration-debate-roils-california-campus.html?_r=0}{nytimes.com/2012/02/02/us/after-workers-are-fired-an-immigration-debate-roils-california-campus.html}}\footnote{\href{http://articles.latimes.com/2013/may/01/local/la-me-ln-college-workers-20130501}{articles.latimes.com/2013/may/01/local/la-me-ln-college-workers-20130501}} Using our model's visualizations of topics over time, we found the following trend of \textit{TSL}'s coverage of the two topics:
 
 <<fig=TRUE,height=10,width=15>>=
 topicgraph(articles,11,2,14)
@@ -135,11 +135,11 @@ Another interesting topic that has been trending recently in \textit{TSL} covera
 topicgraph(articles,20,2,14)
 @
 
-The trend is quite dramatic: Sexual assault was rarely covered in \textit{TSL} before 2012, but it quickly gained prominence starting in 2013 and appears to have peaked in 2014. This is pretty consistent with national coverage of college sexual assault. The White House published its first report on college sexual assault in April 2014, Columbia University student Emma Sulkowicz began carrying a mattress around campus beginning in September 2014, California became the first state to institute an affirmative consent law in September 2014, and Title IX complaints filed against colleges increased from 11 in the 2009-2010 fiscal year to over 37 in the 2013-2014 fiscal year.
+The trend is quite dramatic: Sexual assault was rarely covered in \textit{TSL} before 2012, but it quickly gained prominence starting in 2013 and appears to have peaked in 2014. This is pretty consistent with national coverage of college sexual assault.\footnote{\href{http://america.aljazeera.com/watch/shows/america-tonight/articles/2014/11/10/timeline-collegesexualassault.html}{america.aljazeera.com/watch/shows/america-tonight/articles/2014/11/10/timeline-collegesexualassault.html}} The White House published its first report on college sexual assault in April 2014, Columbia University student Emma Sulkowicz began carrying a mattress around campus beginning in September 2014, California became the first state to institute an affirmative consent law in September 2014, and Title IX complaints filed against colleges increased from 11 in the 2009-2010 fiscal year to over 37 in the 2013-2014 fiscal year.\footnote{\href{http://www.nytimes.com/2014/05/04/us/fight-against-sex-crimes-holds-colleges-to-account.html}{nytimes.com/2014/05/04/us/fight-against-sex-crimes-holds-colleges-to-account.html}}
 
 From some of the headlines in the visualization, we can see that the Claremont Colleges have undergone a multitude of changes in response to sexual assault beginning in 2013, including changes in party culture, the creation of task forces dedicated to sexual assault, the implementation of bystander training programs like Teal Dot, and the creation of full-time Title IX coordinator positions.
 
-The final topic trend that we found particularly insightful is that related to movements centered around inequality and student movements. Here's the trend that our model produced:
+The final topic trend that we found particularly insightful is the student movements topic. Here's the trend that our model produced:
 
 <<fig=TRUE,height=10,width=15>>=
 topicgraph(articles,31,2,14)
@@ -167,7 +167,7 @@ topic.terms[1:10,5]
 
 It seems like Sana Kadri wrote a lot on topic 5 internationalism and race for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
 
-Finally, we can examine the topic content of articles written by the editorial board of \textit{TSL}. Each issue, the editorial board, which consists of the editor-in-chief and the two managing editors, writes a brief editorial that is published in the opinions section. Often, it reflects on another article printed in the same issue. Here's the topic content analysis of the editorial board's pieces:
+Finally, we can examine the topic content of articles written by the editorial board of \textit{TSL}. Each issue, the editorial board, which consists of the editor-in-chief and the two managing editors, writes a brief editorial that is published in the opinions section.\footnote{It shoud be noted that, since \textit{TSL} staff changes every semester, the people who are part of editorial board are not necessarily the same from one semester to the next.} Often, it reflects on another article printed in the same issue. Here's the topic content analysis of the editorial board's pieces:
 
 <<fig=TRUE,height=10,width=15>>=
 print(authorChart2(articles,'Editorial Board',2))
