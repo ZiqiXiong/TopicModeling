@@ -200,14 +200,14 @@ retention <- articles %>%
          semester=='spring','spring','fall'),
          semestersTotal = ifelse(semesterOff==semesterJoin,(maxYear-minYear)*2+1, 
          (maxYear-minYear)*2),
-         yearsTotal = n())
+         totalPublished = n())
 
 retention <- retention[!duplicated(retention[,6]),]
 @
 
 <<fig=TRUE>>=
 retention %>%
-  filter(yearsTotal > 1 | section_id !=3) %>%
+  filter(totalPublished > 1 | section_id !=3) %>%
   group_by(semestersTotal) %>%
   summarise(n = n()) %>%
   ggplot(aes(x = semestersTotal)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) +
@@ -223,7 +223,7 @@ We can easily track the retention rate by section as well:
 <<fig=TRUE>>=
 retention %>%
   filter(section_id != 5) %>%
-  filter(yearsTotal > 1 | section_id !=3) %>%
+  filter(totalPublished > 1 | section_id !=3) %>%
   group_by(semestersTotal, section_id) %>%
   summarise(n = n()) %>%
   ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() +
