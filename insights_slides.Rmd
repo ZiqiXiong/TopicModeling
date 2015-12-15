@@ -178,7 +178,7 @@ names(clicks) <- c('id','clicks')
 (articles %>%
   left_join(clicks, by = 'id') %>%
   arrange(desc(clicks)) %>%
-  slice(1:10))[,c(2,4,7,12)]
+  slice(1:15))[,c(2,4,7,12)]
 ```
 
 ## Least-Viewed Articles (Fall 2015) {.smaller}

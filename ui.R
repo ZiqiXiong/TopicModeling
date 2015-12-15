@@ -21,6 +21,7 @@ shinyUI(navbarPage("Topic Analysis of TSL articles",
                                         choices=list("20"="20 topics","25"="25 topics","30"="30 topics","35"="35 topics",
                                                      "40"="40 topics","45"="45 topics","50"="50 topics"),
                                                      selected="40 topics"),
+                            dataTableOutput('topic.label'),
                             dataTableOutput('topic.table')
                             ),
                    

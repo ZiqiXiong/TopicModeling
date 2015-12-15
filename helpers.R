@@ -2,7 +2,7 @@ readData <- function(){
   require('dplyr')
   
   #read data from raw csv file
-  articles <- read.csv("articles.csv",header=FALSE)
+  articles <- read.csv("data/articles.csv",header=FALSE)
   names(articles) <- c('id','title','content','clicks','created_date','published','published_date',
                        'updated_date','legacy_id','position','issue_id','section_id')
   articles <- articles %>% dplyr::filter(published==1)
@@ -27,9 +27,9 @@ readData <- function(){
   articles <- articles[wordCount(articles$content)>50,]
   
   #link authors to their articles
-  profile.article <- read.csv('profile_article.csv', header=FALSE)[,c(2,3)]
+  profile.article <- read.csv('data/profile_article.csv', header=FALSE)[,c(2,3)]
   names(profile.article) <- c("article_id","profile_id")
-  profiles <- read.csv('profiles.csv', header=FALSE)[,c(1,3)]
+  profiles <- read.csv('data/profiles.csv', header=FALSE)[,c(1,3)]
   names(profiles) <- c('profile_id', 'author_name')
   profile.article <- left_join(profile.article,profiles,by="profile_id")
   names(profile.article)[1] <- 'id'
@@ -56,7 +56,7 @@ classifyResult <- function(content,topic.model){
   topic.probs.table <- data.frame(Topic.ID=seq(1,length(topic.probs),1))
   topic.probs.table$Weight = as.numeric(t(topic.probs))
   topic.probs.table <- topic.probs.table[order(-topic.probs.table$Weight),]
-  result = topic.probs.table[1:5,]
+  result = topic.probs.table[1:3,]
   result
 }
 
