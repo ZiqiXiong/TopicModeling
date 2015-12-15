@@ -353,7 +353,7 @@ clicks %>%
 
 It seems like opinions pieces are viewed the most, though news pieces are not far behind. Articles in the sports and life \& style section, though, are not viewed as much; the upper quartile for sports articles is below the lower quartile for opinions pieces, and the upper quartile for life \& style articles is not much higher. This makes sense given the atmosphere at the Claremont Colleges. Students generally seem less interested in topics covered in sports and life and style pieces than they are in topics covered in news and opinions pieces.
 
-\section{End Product}
+\section{Cumulative Product}
 This project is not only about gaining insights into student discourse, but also about creating an infrastructural tool that allows other interested students to find answers to their own questions about our history. With that goal in mind, we created an interactive shiny app that can respond to users' queries on different topics, authors and articles and then generate plots or perform analyses similar to those in this report. The app is online at \href{https://ziqixiong.shinyapps.io/TopicAnalysis}{https://ziqixiong.shinyapps.io/TopicAnalysis}.
 \vspace{1cm}
 
