@@ -310,7 +310,7 @@ Similarly, we can identify the most-viewed writers on average:
 
 A lot of these are one-hit writers, which makes sense. The opinions section regularly invites guest writers to publish a piece in the paper. Typically, when this happens, the guest writer writes about a particularly controversial or timely subject; that is what motivates them to write, after all. As such, their pieces often get a lot of views. On the other hand, the other sections' pieces are written by regular staff writers, who have to cover the mundane along with the occasional big events each semester. Since the guest writers typically only write once about a hot-button issue, it makes sense that many of the most-viewed writers have only written once for the newspaper.
 
-Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views:
+Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views, where ``regular'' is defined as more than three contributions in this case:
 
 <<echo=FALSE>>=
 # let's see among the more consistent writers
@@ -323,18 +323,7 @@ Nonetheless, we might be interested in seeing which regular contributors to the 
   slice(1:10))
 @
 
-We now move from examining individual view counts to examining the aggregate data. Here's a boxplot of article views for articles published in fall 2015:
-
-<<fig=TRUE>>=
-# plot distribution of views in fall 2015
-clicks %>%
-  ggplot(aes(x = semester, y = clicks)) + geom_boxplot() + xlab('Semester') +
-  ylab('Cumulative Number of Clicks') +
-  ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
-@
-
-
-We can see that there are some extreme outliers---the articles from the most-viewed list above---that make it difficult to look at the rest of the observations, so we'll focus our view on the bulk of the data:
+We now move from examining individual view counts to examining the aggregate data. The following is a boxplot of article views for articles published in fall 2015. Since there are some extreme outliers---the articles from the most-viewed list above---that make it difficult to look at the rest of the observations, we'll focus our view on the bulk of the data:
 
 <<fig=TRUE, warning=FALSE>>=
 # exclude outliers from view
