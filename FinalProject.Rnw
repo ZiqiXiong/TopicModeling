@@ -180,9 +180,6 @@ The chart indicates that the editorial board seems to focus primarily on on-camp
 
 \subsection{Miscellaneous Insights}
 
-
-\subsection{Miscellaneous Insights}
-
 <<echo=FALSE>>=
 articles <- readData()
 @
