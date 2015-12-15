@@ -1,3 +1,5 @@
+#This script contains the graphing functions we wrote.
+
 authorGraph <- function(data, authName) {
   tempData <- filter(data, author_name == authName)
   tempData <- arrange(tempData, published_date)

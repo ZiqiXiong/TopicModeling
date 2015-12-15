@@ -24,35 +24,35 @@
 
 
 \section{Motivation}
-They say that those who do not know history are doomed to repeat it. We hope to show how campus dialogue on the Claremont Colleges has changed over time, using articles from The Student Life as representative of the discourse surrounding hot-button issues on campus. \textit{The Student Life}, or \textit{TSL}, is the oldest college newspaper in Southern California, and it is student-written and managed. It thus serves as a good glimpse into the thoughts and discourse of the students of the 5 Claremont Colleges (Pomona, Claremont McKenna, Scripps, Pitzer, Harvey Mudd). The student population itself is in a constant state of flux, as students generally spend only 4-5 years on campus. This ever changing population, and thus ever changing set of \textit{TSL} writers (especially given that writers are probably working for \textit{TSL} during their whole time on campus), means that issues in campus dialogue can repeatedly resurface when current students are not aware of the college discussions that took place four or five years ago. Plus, \textit{TSL} does not have a `` static''  format; the number of articles published in each issue depends on the number of articles written, rather than publishing the same length paper each week. This allows for interesting data on word usage trends, topics covered, authorship, and more over time. How are topics evolving over time? Can we see major spikes in certain topics/phrases and trace those back to major events? Can we use these trends to inform our current dialogue? With better, more easily accessible information on \textit{TSL} history, we can make it easier for future students to see what kind of discussion and action has taken place at the Claremont Colleges so that they can better understand the history of intellectual conversations on our campus and create fresher, deeper discussions in the future.
+They say that those who do not know history are doomed to repeat it. We hope to show how campus dialogue at the Claremont Colleges has changed over time, using articles from \textit{The Student Life} as representative of the discourse surrounding hot-button issues on campus. \textit{The Student Life}, or \textit{TSL}, is the student-run, weekly newspaper of the five Claremont Colleges (Pomona, Claremont McKenna, Scripps, Pitzer, and Harvey Mudd). It thus serves as a good glimpse into the thoughts and discourse of the students on campus. The student population itself is in a constant state of flux, as students generally spend only four or five years on campus. This ever-changing population, and thus ever changing set of \textit{TSL} writers (especially given that most writers probably do not work for \textit{TSL} their entire college careers), means that issues in campus dialogue can repeatedly resurface when current students are not aware of the related discussions that took place four or five years ago. Moreover, \textit{TSL} does not have a `` static''  format; that is, the number of articles and pages printed is not necessarily the same each issue. Rather, it varies depending on the amount of content gathered by the student staff. This allows for interesting data on word usage trends, topics covered, authorship, and more over time. How are topics evolving over time? Can we see major spikes in certain topics and phrases and trace those back to major events? Can we use these trends to inform our current dialogue? With better, more easily accessible information on \textit{TSL} history, we can make it easier for future students to see what kind of discussion and action has taken place at the Claremont Colleges so that they can better understand the history of intellectual conversations on our campus and create fresher, deeper discussions in the future.
 
 \section{Methodology}
 
 \subsection{Data Source}
 
-Our raw data was acquired directly from \textit{TSL}'s SQL database on ASPC peninsula server. The data is in the format of three csv tables: 
+Our raw data was acquired directly from \textit{TSL}'s SQL database on ASPC peninsula server. The data is in the format of three CSV tables: 
 
 \begin{enumerate}
-\item \textbf{articles}: This table contains the information related to the \textit{TSL} articles, including id, title, content, status (published or not), created date, published date, updated date, section id and issue id.
-\item \textbf{profiles}: This table contains the information related to the \textit{TSL} staff, including id, name and position.
-\item \textbf{articles\_profiles}: This table contains the authorship of \textit{TSL} articles. Each row contains a \textit{TSL} staff member id and an article id.
+\item \textbf{articles}: This table contains the information related to the \textit{TSL} articles, including ID, title, content, status (published or not), created date, published date, updated date, section ID, and issue ID.
+\item \textbf{profiles}: This table contains the information related to the \textit{TSL} staff, including ID, name, and position.
+\item \textbf{articles\_profiles}: This table contains the authorship of \textit{TSL} articles. Each row contains a \textit{TSL} staff member ID and an article ID.
 \end{enumerate}
 
-We joined the three tables by article\_id and profile\_id and filtered out all the articles that are not published, do not have enough content (body text less than 50 words), or miss author or published date information. We selected important variables including title, content, published date, and author's name for our analysis.
+We joined the three tables by article\_id and profile\_id and filtered out all the articles that are not published, do not have enough content (body text of fewer than 50 words), or are missing author or published date information. We selected important variables including title, content, published date, and author's name for our analysis.
 
 To access the data we used, visit our code repository at \href{https://github.com/ZiqiXiong/TopicModeling}{https://github.com/ZiqiXiong/TopicModeling}.
 
 \subsection{Model Training}
 
-Our goal is to build an unsupervised model that cluster the \textit{TSL} articles by their similarity in word usage so that each cluster can be labeled later and studied as a topic. With that goal in mind, we studied and used Latent Dirichlet Allocation(LDA) developed by Andrew Ng, et al., in 2003 for our project. LDA is a probabilistic model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. When applied to a collection of text documents, LDA views each document as a mixture of a small number of topics and each word generated by one of the document's topics. With different inference techniques such as Gibbs Sampling, LDA is able to learn the composition of each topic (its associated word probabilities) and the topic mixture of each document.\footnote{``Latent Dirichlet Allocation'', Andrew Ng, et al., \href{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}}
+Our goal was to build an unsupervised model that clusters the \textit{TSL} articles by their similarity in word usage so that each cluster can be labeled later and studied as a topic. With that goal in mind, we studied and used Latent Dirichlet Allocation (LDA), developed by Andrew Ng, et al., in 2003, for our project. LDA is a probabilistic model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. When applied to a collection of text documents, LDA views each document as a mixture of a small number of topics and each word as an occurrence generated by one of the document's topics. With different inference techniques such as Gibbs Sampling, LDA is able to learn the composition of each topic (its associated word probabilities) and the topic mixture of each document.\footnote{``Latent Dirichlet Allocation'', Andrew Ng, et al., \href{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}}
 
-Before training our LDA model, we first processed the body text of \textit{TSL} articles by converting all words to lower case and reducing words to their stems, so that a group of words such as `` study'' ,`` Study''  and `` studies''  can be treated as one. We also removed punctuation, stop words (the most common, short function words), and extremely rare words that would only add noise to our model training. Finally, we transformed the collection of articles into a document-term matrix with each row representing an article and column representing a word. 
+Before training our LDA model, we first processed the body text of \textit{TSL} articles by converting all words to lower case and reducing words to their stems, so that a group of words such as ``study'' ,``Study''  and ``studies''  can be treated as one. We also removed punctuation, stop words (the most common short function words), and extremely rare words that would only add noise to our model training. Finally, we transformed the collection of articles into a document-term matrix with each row representing an article and each column representing a word. 
 
-By using the R package `` topicmodel'', We trained multiple LDA models with different numbers of topics as input, including 25, 30, 35, 40, 45 and 50, so that we can use the most suitable model in our analysis later depending on how general we want the topics to be.
+By using the R package ``topicmodel'', We trained multiple LDA models with different numbers of topics---25, 30, 35, 40, 45 and 50---as input so that we can adjust the generality of the topics to identify and obtain the most suitable model for our analysis.
 
 \subsection{Result and Visualization}
 
-Our LDA model is capable of clustering key words into human-recognizable topic. Take five random topics discovered by our 40-topic model as an example:
+Our LDA model is capable of clustering key words into human-recognizable topics. Take five random topics discovered by our 40-topic model as an example:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -70,9 +70,9 @@ Our LDA model is capable of clustering key words into human-recognizable topic. 
 \end{Soutput}
 \end{Schunk}
 
-The 5 topics can be easily identified as ``music'', ``sex'', ``campus event'', ``student protest'', and ``sports game'' by their top keywords.
+The five topics can be easily identified as ``music,'' ``sex,'' ``campus events,'' ``student protests,'' and ``sports games'' by their top keywords.
 
-In addition to the distribution of words in topics, the LDA model can also calculates the percentage of a topic in an article and infers what the article is about. Take five random \textit{TSL} articles for example:
+In addition to the distribution of words in each topic, the LDA model can also calculate the percentage of each topic in an article and thereby infer the overall subject of the article. Take five random \textit{TSL} articles as an example:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -104,9 +104,9 @@ In addition to the distribution of words in topics, the LDA model can also calcu
 \end{Soutput}
 \end{Schunk}
 
-As we can see from the result above, ``Women's Basketball Struggles Through Tough First Games'' is categorized into topic 1 about team sports, ``Peace, Popular Opinion, and the Prisoner Exchange'' into topic 16 about national politics, ``Panel at CMC Debates Approach to Syria Conflict'' into topic 10 about student discussion, `` Students Put Out Fire in Scripps Dorm'' into topic 34 about residential life, and ``Ye Olde TSL: 1927, The First Year of the Sponsor Group'' into topic 27 about Pomona sponsor program. 
+As we can see from the result above, ``Women's Basketball Struggles Through Tough First Games'' is categorized into topic 1, which is about team sports; ``Peace, Popular Opinion, and the Prisoner Exchange'' into topic 16, which is about national politics; ``Panel at CMC Debates Approach to Syria Conflict'' into topic 10, which is about student discussion; `` Students Put Out Fire in Scripps Dorm'' into topic 34, which is about residential life; and ``Ye Olde TSL: 1927, The First Year of the Sponsor Group'' into topic 27, which is about Pomona's sponsor program. 
 
-Our model can also discover topics in articles that are not in our \textit{TSL} dataset. For example, it can successfully categorize an 108-word excerpt from Martin Luther King's speech ``I Have a Dream'' into topic 16 about national politics and topic 31 about student protest.
+Our model can also identify the main topics in an article that is not already in our \textit{TSL} dataset. For example, it can successfully categorize an 108-word excerpt from Martin Luther King's speech ``I Have a Dream'' into topic 16, which is about national politics, and topic 31, which is about student protest.
 
 \begin{Schunk}
 \begin{Sinput}
@@ -139,7 +139,7 @@ Our model can also discover topics in articles that are not in our \textit{TSL} 
 \end{Soutput}
 \end{Schunk}
 
-After categorizing each article into its related topics, we are able to plot the frequency of a topic over time by counting the number of its articles every week. For example, here is the plot of topic 31 about films:
+After categorizing each article into its related topics, we were able to plot the frequency with which a given topic appears over time by counting the number of articles printed in each issue of \textit{TSL} that are about that topic. For example, here is the plot of topic 31, which is about films:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -149,7 +149,7 @@ After categorizing each article into its related topics, we are able to plot the
 \includegraphics{FinalProject-005}
 
 
-We can also visualize what topics each author writes about. Take Opinion writer William Schumacher for example: 
+We can also visualize which topics each writer tends to write about. Take opinions columnist William Schumacher, for example: 
 
 \begin{Schunk}
 \begin{Sinput}
@@ -188,7 +188,7 @@ Two prominent movements in the recent history of the Claremont Colleges are the 
 \end{Schunk}
 \includegraphics{FinalProject-007}
 
-The graph shows that \textit{TSL} coverage of the two topics was robust from the spring of 2009 up to and including the spring of 2013. In particular, it reached its height between the fall of 2011 and the spring of 2013. Some interesting article headlines include ``NLRB Will Investigate Labor Practice Charges at Pomona Dining Halls'' at the peak in December 2011, ``WFJ Votes to Unionize'' at the very end of May 2013, ``Pomona Opts Not to Divest'' in October 2013, and``Pitzer College to Divest From Fossil Fuel Funds'' around April of 2014.
+The graph shows that \textit{TSL} coverage of the two topics was robust from the spring of 2009 up to and including the spring of 2013. In particular, it reached its height between the fall of 2011 and the spring of 2013. Some interesting article headlines include ``NLRB Will Investigate Labor Practice Charges at Pomona Dining Halls'' at the peak in December 2011, ``WFJ Votes to Unionize'' at the very end of May 2013, ``Pomona Opts Not to Divest'' in October 2013, and``Pitzer College to Divest From Fossil Fuel Funds'' around April 2014.
 
 Unfortunately, our model wasn't able to separate the two topics, but the results are nonetheless fascinating. From our own perspective as juniors at Pomona College, the visualization is especially illuminating. We came to Pomona in the fall of 2013, right at the tail end of the peaks of the dining hall and divestment movements, as the visualization accurately shows. The semester before we arrived, the dining hall workers voted to unionize; the semester we arrived, President David Oxtoby announced Pomona's decision not to divest from fossil fuels; and the semester after we arrived, Pitzer College announced that it would divest from fossil fuels. Shortly after that, the discussions about the two topics died down, both in \textit{TSL} and in general campus discourse. Regardless of one's opinions on these issues, they were exciting events in the colleges' history, and while we were able to witness the ultimate outcomes, we had virutally no knowledge of the related events and discussions that preceded the outcomes. With the visualizations our model provides, we're now better able to access key institutional memory in the form of \textit{TSL} coverage of the topics in order to understand these outcomes in their broader context that spans several years.
 
@@ -214,8 +214,7 @@ The final topic trend that we found particularly insightful is the student movem
 \end{Schunk}
 \includegraphics{FinalProject-009}
 
-Based on the graph, it seems that events and discussions centered around inequality (our model appears to overlap racial, sexual, and economic inequality to some degree) have been occurring pretty consistently over time at the Claremont Colleges. We can see that in December 2012, the Occupy Movement gained some coverage by \textit{TSL}. More recently, in December 2014 students reacted to events in Ferguson by marching through the colleges. The most obvious observation, though, is that the topic really blew up in November 2015, when students protested recent events related to race centered at Claremont McKenna College.
-[ELABORATE MORE HERE]
+Based on the graph, it seems that coverage of student movements, which tend to center around differences in dynamics and power, has been fairly consistent over time at the Claremont Colleges. We can see that in December 2012, the Occupy Movement gained some coverage by \textit{TSL}. More recently, in December 2014 students reacted to events in Ferguson by marching through the colleges. The most obvious observation, though, is that the topic really blew up in November 2015, when students protested recent race-related events centered at Claremont McKenna College.\footnote{\href{http://www.latimes.com/local/lanow/la-me-ln-claremont-marches-20151112-story.html}{latimes.com/local/lanow/la-me-ln-claremont-marches-20151112-story.html}}
 
 Another neat feature of our model is its analysis and visualization of topic coverage by writer. Here's an example:
 
@@ -231,8 +230,7 @@ Another neat feature of our model is its analysis and visualization of topic cov
 \end{Schunk}
 \includegraphics{FinalProject-010}
 
-The graph shows the topics the writer has written the most about. In this case, we can see that Diane Lee wrote a lot of pieces on topic 39 about administrative actions and decisions at the Claremont Colleges.
-[maybe elaborate on her positions through the years]
+The graph shows the topics the writer has written the most about. In this case, we can see that Diane Lee, a news writer and eventually editor for \textit{TSL}, wrote a lot of pieces on topic 39, which is about administrative actions and decisions at the Claremont Colleges.
 
 Here's another example:
 
@@ -248,7 +246,7 @@ Here's another example:
 \end{Schunk}
 \includegraphics{FinalProject-011}
 
-It seems like Sana Kadri wrote a lot on topic 5 internationalism and race for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
+It seems like Sana Kadri wrote a lot on topic 5---internationalism and race---for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
 
 Finally, we can examine the topic content of articles written by the editorial board of \textit{TSL}. Each issue, the editorial board, which consists of the editor-in-chief and the two managing editors, writes a brief editorial that is published in the opinions section.\footnote{It shoud be noted that, since \textit{TSL} staff changes every semester, the people who are part of editorial board are not necessarily the same from one semester to the next.} Often, it reflects on another article printed in the same issue. Here's the topic content analysis of the editorial board's pieces:
 
@@ -264,7 +262,7 @@ Finally, we can examine the topic content of articles written by the editorial b
 \end{Schunk}
 \includegraphics{FinalProject-012}
 
-The chart indicates that the editorial board seems to focus primarily on topic 10 about on-campus student controversies. This would make sense, since events related to such issues often occur and are covered by \textit{TSL}. Also, these issues often generate a lot of discussion and, at times, controversy on campus, making them relevant and appealing topics of conversation for the editorial board to discuss.
+The chart indicates that the editorial board seems to focus primarily on topic 10, which is about on-campus student controversies. This would make sense, since events related to such issues often occur and are covered by \textit{TSL}. Also, these issues often generate a lot of discussion and, at times, controversy on campus, making them relevant and appealing topics of conversation for the editorial board to discuss.
 
 \subsection{Miscellaneous Insights}
 
@@ -285,9 +283,7 @@ There's a lot to be learned from the data beyond the topic content analysis. For
 \end{Schunk}
 \includegraphics{FinalProject-015}
 
-
-
-It seems like \textit{TSL}'s reputation for shedding writers isn't exaggerated. Out of the pool of writers over the past five years, 652 writers stay for one semester or less; 108 writers stay for two semesters; 40 stay for three; and 85 stay for four or more semesters. There are a few caveats, though. First, since the database only includes articles published within the last five years, it's possible that some writers who were seniors when the data first began being collected had been writing for \textit{TSL} for many semesters but are represented as only writing for one semester because their earlier articles aren't included in the database. This might lead to an overestimate of the number of writers who only stay for one or two semesters. Second, the method we applied above to calculate retention reports the difference between the first semester they began writing for \textit{TSL} and the last semester they wrote for \textit{TSL}. Some writers, however, take a semester or more off from writing for \textit{TSL} to study abroad or simply pursue other interests before returning to write again. In these cases, the number of semesters they spent writing for \textit{TSL} are overestimated. These cases probably consistute only a small minority of the data points, however, so the overall trend still holds.
+It seems like \textit{TSL}'s reputation for shedding writers isn't exaggerated. Out of the pool of writers over the past five years, 652 writers stay for one semester or less; 108 writers stay for two semesters; 40 stay for three; and 85 stay for four or more semesters. There are a few caveats, though. First, since the database only includes articles published within the last five years, it's possible that some writers who were seniors when the data first began being collected had been writing for \textit{TSL} for many semesters but are represented as only writing for one semester because their earlier articles aren't included in the database. This might lead to an overestimate of the number of writers who only stay for one or two semesters. Second, the method we applied above to calculate retention reports the difference between the first semester they began writing for \textit{TSL} and the last semester they wrote for \textit{TSL}. Some writers, however, take a semester or more off from writing for \textit{TSL} to study abroad or simply pursue other interests before returning to write again. In these cases, the number of semesters they spent writing for \textit{TSL} are overestimated. Lastly, there are a few points that go beyond 8, and even 10, semesters. Those represent a mix of people staying longer and alumni writing guest columns.
 
 We can easily track the retention rate by section as well:
 
@@ -306,9 +302,9 @@ We can easily track the retention rate by section as well:
 \end{Schunk}
 \includegraphics{FinalProject-016}
 
-It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. Unfortunately, we can't filter those writers out given the data that we have.
+It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. 
 
-Another area of interest might be how prolific writers for \textit{TSL} are--that is, how many articles each writer writes. It seems pretty reasonable to expect that trend to resemble the retention rates shown above. After all, a person can only write so many articles if they're only a writer for one semester. And indeed, we can see that this is the case:
+Another area of interest might be how prolific writers for \textit{TSL} are---that is, how many articles each writer writes. It seems pretty reasonable to expect that trend to resemble the retention rates shown above. After all, a person can only write so many articles if they're only a writer for one semester. And indeed, we can see that this is the case:
 
 
 \begin{Schunk}
@@ -319,7 +315,7 @@ Another area of interest might be how prolific writers for \textit{TSL} are--tha
 +   xlab('Number of Articles Written') + ylab('Number of Writers')
 \end{Sinput}
 \end{Schunk}
-
+\includegraphics{FinalProject-018}
 
 We can also break it down by section:
 
@@ -341,9 +337,9 @@ We can also break it down by section:
 \end{Schunk}
 \includegraphics{FinalProject-019}
 
+The opinions section has the fewest articles per writer---notice the scaling of the y-axis for the opinions plot. The news and life \& style sections seem to have the most articles per writer in general.
 
-
-Finally, we were able to get a sense of how popular articles published this semester have been by looking at the number of times each article was visited. Because data on the number of visitors to each article only began being collected in the fall semester of 2015, we had to limit our analysis to articles in that time period. Below are the top 10 most-viewed articles from the fall:
+Finally, we were able to identify which articles published this semester have been especially popular by looking at the number of times each article was visited. Because data on the number of visitors to each article only began being collected in the fall semester of 2015, we had to limit our analysis to articles in that time period. Below are the top 10 most-viewed articles from the fall:
 
 \begin{Schunk}
 \begin{Soutput}
@@ -398,7 +394,7 @@ Source: local data frame [10 x 3]
 
 A lot of these are one-hit writers, which makes sense. The opinions section regularly invites guest writers to publish a piece in the paper. Typically, when this happens, the guest writer writes about a particularly controversial or timely subject; that is what motivates them to write, after all. As such, their pieces often get a lot of views. On the other hand, the other sections' pieces are written by regular staff writers, who have to cover the mundane along with the occasional big events each semester. Since the guest writers typically only write once about a hot-button issue, it makes sense that many of the most-viewed writers have only written once for the newspaper.
 
-Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views:
+Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views. Here, a ``regular contributor'' is defined as one who has written more than three articles for the paper:
 
 \begin{Schunk}
 \begin{Soutput}
@@ -419,54 +415,23 @@ Source: local data frame [10 x 3]
 \end{Soutput}
 \end{Schunk}
 
-We now move from examining individual view counts to examining the aggregate data. Here's a boxplot of article views for articles published in fall 2015:
+We now move from examining individual view counts to examining the aggregate data. Here's a histogram of article views for articles published in fall 2015, excluding the outliers mentioned earlier:
 
 \begin{Schunk}
 \begin{Sinput}
-> # plot distribution of views in fall 2015
 > clicks %>%
-+   ggplot(aes(x = semester, y = clicks)) + geom_boxplot() + xlab('Semester') +
-+   ylab('Cumulative Number of Clicks') +
++   ggplot() + geom_histogram(aes(x = clicks), binwidth = 10) +
++   scale_x_continuous(limits = c(0,1000)) +
++   xlab('Number of Clicks') + ylab('Number of Articles') + 
 +   ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
 \end{Sinput}
 \end{Schunk}
 \includegraphics{FinalProject-024}
 
+It seems like most articles are viewed fewer than 300 times, although there are a decent number that are viewed more than 750 times.
 
-We can see that there are some extreme outliers---the articles from the most-viewed list above---that make it difficult to look at the rest of the observations, so we'll focus our view on the bulk of the data:
+We can break the data down by section too, this time with boxplots. Again, we exclude outliers to focus on the bulk of the observations:
 
-\begin{Schunk}
-\begin{Sinput}
-> # exclude outliers from view
-> clicks %>%
-+   ggplot(aes(x = semester, y = clicks)) + geom_boxplot() +
-+   scale_y_continuous(limits = c(0,500)) + xlab('Semester') +
-+   ylab('Cumulative Number of Clicks') +
-+   ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
-\end{Sinput}
-\end{Schunk}
-\includegraphics{FinalProject-025}
-
-
-The median article published this semester, arranged by number of views, was viewed just over 200 times. The upper quartile of articles are viewed at least 300 times each, while the lower quartile are viewed at most about 145 times each.
-
-We can break the data down by section too:
-
-\begin{Schunk}
-\begin{Sinput}
-> # do the same as above but by section
-> clicks %>%
-+   filter(section_id != 5) %>%
-+   mutate(section = ifelse(section_id==1, 'News', ifelse(section_id==2, 'Sports',
-+   ifelse(section_id==3, 'Opinions', 'L&S')))) %>%
-+   ggplot(aes(x = factor(section), y = clicks)) + geom_boxplot() +
-+   xlab('Section') + ylab('Cumulative Number of Clicks') +
-+   ggtitle('Distribution of Clicks by Section of TSL Fall 2015 Articles')
-\end{Sinput}
-\end{Schunk}
-\includegraphics{FinalProject-026}
-
-Focusing on the bulk of the observations: 
 
 \begin{Schunk}
 \begin{Sinput}
@@ -481,30 +446,11 @@ Focusing on the bulk of the observations:
 +   ggtitle('Distribution of Clicks by Section of TSL Fall 2015 Articles')
 \end{Sinput}
 \end{Schunk}
-\includegraphics{FinalProject-027}
+\includegraphics{FinalProject-025}
 
-It seems like opinions pieces are viewed the most, though news pieces are not far behind. Articles in the sports and life \& style section, though, are not viewed as much; the upper quartile for sports articles is below the lower quartile for opinions pieces, and the upper quartile for life \& style articles is not much higher. This makes sense given the atmosphere at the Claremont Colleges. Students generally seem less interested in topics covered in sports and life and style pieces than they are in topics covered in news and opinions pieces.
+It seems like opinions pieces are viewed the most, though news pieces are not far behind. Articles in the sports and life \& style section, though, are not viewed as much; the upper quartile for sports articles is below the lower quartile for opinions pieces, and the upper quartile for life \& style articles is not much higher. This makes sense given the atmosphere at the Claremont Colleges. Students generally seem less interested in topics covered in sports and life \& style pieces than they are in topics covered in news and opinions pieces.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{End Product}
+\section{Cumulative Product}
 This project is not only about gaining insights into student discourse, but also about creating an infrastructural tool that allows other interested students to find answers to their own questions about our history. With that goal in mind, we created an interactive shiny app that can respond to users' queries on different topics, authors and articles and then generate plots or perform analyses similar to those in this report. The app is online at \href{https://ziqixiong.shinyapps.io/TopicAnalysis}{https://ziqixiong.shinyapps.io/TopicAnalysis}.
 \vspace{1cm}
 
@@ -512,10 +458,13 @@ This project is not only about gaining insights into student discourse, but also
 
 \section{Conclusion}
 \subsection{Summary}
-After building models through Latent Dirichlet Allocation of the corpus of \textit{TSL} articles over the past five years, we were able to track how much coverage various subjects received in \textit{TSL} over time. From this, a rough idea of how these topics have been trending over time can be ascertained. For example, from our model we infer that [insert example]. Using the topic information in conjunction with the articles, authors, and time, many other insights can be gleaned. These include the topic breakdowns for each author and article; that is, how much each author or article falls into certain topics. The models can also be applied in order to analyze the topic breakdowns of new articles, or even entirely different documents. Through this, we aim to provide a tool for more future analysis of TSL discourse, and thus student discourse over time.
+
+After building models through Latent Dirichlet Allocation of the corpus of \textit{TSL} articles over the past five years, we were able to track how much coverage various subjects received in \textit{TSL} over time. From this, a rough idea of how these topics have been trending over time can be ascertained. Moreover, using the topic information in conjunction with the articles, authors, and time, many other insights can be gleaned, such as the topic breakdowns for each author and article (how much each author or article can be categorized into particular topics). The models can also be applied to analyze the topic breakdowns of new articles or even entirely different documents. Through these features, we hope that our model can become a tool for future analysis of TSL discourse, and thus student discourse, over time.
+
+Additionanlly, from our brief analysis using our model and data, we identified several interesting characteristics of \textit{TSL}. For example, we found generally that \textit{TSL} has low retention rates for writers and receives most of its views from opinions pieces and guest writers in particular. We suggest further examining these trends and potentially taking steps to address them. For example, \textit{TSL} might benefit from expanding its outreach to guest writers, especially those who are willing to contribute to campus dialogue on hot-button issues.
 
 \subsection{Limitations}
-Our model faces several limitations, regarding both its analysis of topic coverage in \textit{TSL} and the inferences that can reasonably be drawn from its findings. Some of the topics generated through the model creation process are not very useful. For example, there are a few scattered `` Miscellaneous''  topics that have no logical continuity between the articles. The key words used for these miscellaneous topics have little relation to each other. This is bound to happen sometimes, as LDA is an unsupervised method, so we should not necessarily expect it to always find groups that make sense to us. For some numbers of topics, a topic based around weird punctuation or symbols that a few authors use is generated, since these are counted as distinctive words. Sometimes, topics are also combined, as is the case with `` Campus Activism''  combining both the divestment action and the action around the campus worker rights in 2012. On the whole, LDA produced topics that were sensible and comprehensible, ranging from ``Running'' to ``Fashion.'' In the 40 Topic model, for instance, there was only one ``Miscellaneous'' topic and one ``NA'' topic (which was due to the weird symbols used by a few authors). This means that 38/40 topics were useful, which is a very good proportion for an unsupervised method. As with all tools, it is useful so long as the shortcomings are kept in mind.
+Our model faces several limitations regarding both its analysis of topic coverage in \textit{TSL} and the inferences that can reasonably be drawn from its findings. Some of the topics generated through the model creation process are not very useful. For example, there are a few scattered ``Miscellaneous''  topics that have no logical continuity between the articles described by that topic. The key words used for these miscellaneous topics have little relation to each other. This is bound to happen sometimes, as LDA is an unsupervised method, so we should not necessarily expect it to always find groups that make sense to us. For some numbers of topics, a topic based around weird punctuation or symbols that a few authors use is generated, since these are counted as distinctive words. Sometimes, topics are also combined, as is the case with ``Campus Activism'' combining both the divestment movement and the events surrounding Pomona workers' rights in 2012. On the whole, LDA produced topics that were sensible and comprehensible, ranging from ``Running'' to ``Fashion.'' In the 40-topic model, for instance, there was only one ``Miscellaneous'' topic and one ``NA'' topic (which was due to the weird symbols used by a few authors). This means that 38/40 topics were useful, which is a very good proportion for an unsupervised method. As with all tools, it is useful so long as the shortcomings are kept in mind.
 
 \subsection{Future Work}
 The model could also be improved to enable users to obtain a more accurate understanding of how the prominence of topics in campus discourse has changed over time. Perhaps most obviously, the frequency with which a \textit{TSL} article is visited online over a certain period of time likely is significant indicator of the prominence of the article's main topic during that period of time. Currently, the model does not include such information because the number of visitors was not tracked until this semester. As a result, certain topics are represented by the model as more prominent in campus discourse than perhaps they truly were. For example, our model produces three or four topics that are all essentially athletics. Moreover, since the sports section consistently covers sports events at the Claremont Colleges every issue of the newspaper, the model's visualization shows a consistently moderate number of \textit{TSL} articles covering sports, giving the impression that sports figure relatively prominently in the collective campus conscious. Without prior knowledge of our campus culture, it might be easy for someone to draw such an inference, when in fact athletics has a relatively modest place in campus dialogue. The frequency of visitors to each article would provide a different perspective: As shown in Section 4.2, sports articles generally had fewer online visitors than news and opinions articles this semester, and certain pieces related to race-based issues and Pomona branding received the most visitors. These data points are likely more consistent with the nature of campus discourse this past semester. If the model accounted for this type of information in its visualizations, it would present a more accurate picture of how topics trend over time. The issue of topics that aren't useful to humans can be helped through the implementation of interactivity into the LDA building. Since LDA iterates until reaching a local optima, it can be nudged out of this optima by taking user input, such as ``this word cannot be in this topic.'' This would be more of a power user feature than one for the average user, as it requires computational time to reiterate for topic building. Finally, if it would be possible to obtain and convert data on articles before 2009 into a usable format, this could obviously grant more ability to perform historical analysis.

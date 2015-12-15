@@ -1,3 +1,5 @@
+#This includes all the R packages we used.
+
 require('tm')
 require('topicmodels')
 require('SnowballC')
@@ -9,4 +11,4 @@ require('lubridate')
 require('scales')
 require('magrittr')
 require('gridExtra')
-require('rCharts')
+

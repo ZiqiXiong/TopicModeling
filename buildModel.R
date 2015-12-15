@@ -1,3 +1,7 @@
+#This script builds LDA models for different numbers of topics. 
+#The models have been built and saved as R objects. "25 topics", "30 topics", etc.
+#No need to use this script unless you want to rebuild them.
+
 source('dependencies.R')
 source('helpers.R')
 articles <- readData()
