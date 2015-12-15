@@ -53,7 +53,7 @@ topicgraph <- function(data, topic, topic.sig, divide) {
                  labels=date_format("%Y-%b"),
                  limits=c(intrvl[1],intrvl[2])) +
     ylab("Frequency") + xlab("Year and Month") +
-    theme_bw() + theme(axis.text.x = element_text(angle=90)) 
+    theme_bw() + theme(text=element_text(size=40),axis.text.x=element_text(angle=90,size=25)) 
 }
 
 topicgraph2 <- function(data, topic, topic.sig=1, divide=7){
@@ -68,7 +68,7 @@ authorChart2 <- function(articles, author, topic.sig){
   works = dplyr::filter(articles,author_name==author)
   works.by.topic = authorChartHelper(works,topic.sig)
   ggplot(works.by.topic,aes(x=label,y=value))+geom_bar(stat='identity',aes(fill=label)) +
-    ylab("Frequency") + xlab("Topics")
+    ylab("Frequency") + xlab("Topics") + theme(text = element_text(size=40))
 }
 
 authorChart <- function(articles, author, topic.sig){
