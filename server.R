@@ -7,11 +7,17 @@ source("graphing.R")
 topic.file.names <- c("20 topics","25 topics","30 topics","35 topics","40 topics",
                       "45 topics","50 topics")
 topic.objects <- list()
+label.objects <- list()
 for (topic.file.name in topic.file.names){
   load(topic.file.name)
   topic.objects[[topic.file.name]] <- topic.model
 }
 remove(topic.model)
+for (label.file.name in topic.file.names){
+  labels <- read.csv(paste('TopicLabels/',label.file.name,'.csv',sep=''))
+  label.objects [[label.file.name]] <- labels
+}
+remove(labels)
 
 #load articles
 articles <- readData()
@@ -21,7 +27,6 @@ getPage<-function(article.id) {
                      ,id="iframe"
                      , height = "500px"))
 }
-
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -35,7 +40,7 @@ shinyServer(function(input, output,session) {
           paste(index[ (value >= convertSecondsToDate(x$xmin_) ) 
                        & (value <= convertSecondsToDate(x$xmax_))
                        ],
-                collapse=', '),
+                collapse='; '),
           width = 60)
       }
   }
@@ -46,7 +51,7 @@ shinyServer(function(input, output,session) {
     else {
       works = filterData(joined.articles(),topic=x$label,authName=input$author.name,topicSig=2)
       titles = works$title
-      strwrap(paste(titles,collapse=', '),width = 60)
+      strwrap(paste(titles,collapse='; '),width = 60)
     }
   }
 
@@ -63,14 +68,17 @@ shinyServer(function(input, output,session) {
     joined.articles = join.articles.with.topics(articles,topic.objects[[topic.number]],3)
     joined.articles
   })
- 
-  output$test.table <- renderDataTable({
-    joined.articles.with.topic  
-  })
   
   output$topic.table <- renderDataTable({
     topic.number <- input$topic.number
     get.topic.terms(topic.objects[[topic.number]],20)
+  },options = list(pageLength = 10))
+  
+  output$topic.label <- renderDataTable({
+    topic.number <- input$topic.number
+    dt <- data.frame(t(label.objects[[topic.number]]))
+    names(dt) <- rep('',ncol(dt))
+    dt
   },options = list(pageLength = 10))
   
   output$article.page <- renderUI({
