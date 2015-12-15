@@ -234,7 +234,7 @@ retention %>%
   scale_x_continuous(limits=c(1,13),breaks=seq(0,13,2))
 @
 
-It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. Unfortunately, we can't filter those writers out given the data that we have.
+It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. 
 
 Another area of interest might be how prolific writers for \textit{TSL} are--that is, how many articles each writer writes. It seems pretty reasonable to expect that trend to resemble the retention rates shown above. After all, a person can only write so many articles if they're only a writer for one semester. And indeed, we can see that this is the case:
 
@@ -310,7 +310,7 @@ Similarly, we can identify the most-viewed writers on average:
 
 A lot of these are one-hit writers, which makes sense. The opinions section regularly invites guest writers to publish a piece in the paper. Typically, when this happens, the guest writer writes about a particularly controversial or timely subject; that is what motivates them to write, after all. As such, their pieces often get a lot of views. On the other hand, the other sections' pieces are written by regular staff writers, who have to cover the mundane along with the occasional big events each semester. Since the guest writers typically only write once about a hot-button issue, it makes sense that many of the most-viewed writers have only written once for the newspaper.
 
-Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views. Here, a regular contributor is defined as one who written more than three articles for the paper:
+Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views. Here, a ``regular contributor'' is defined as one who written more than three articles for the paper:
 
 <<echo=FALSE>>=
 # let's see among the more consistent writers
@@ -335,7 +335,8 @@ clicks %>%
 
 It seems like most articles are viewed fewer than 300 times, although there are a decent number that are viewed more than 750 times.
 
-We can break the data down by section too, this time with boxplots:
+We can break the data down by section too, this time with boxplots. Again, we exclude outliers to focus on the bulk of the observations:
+
 
 <<fig=TRUE, warning=FALSE>>=
 # exclude outliers from view
@@ -351,26 +352,7 @@ clicks %>%
 
 It seems like opinions pieces are viewed the most, though news pieces are not far behind. Articles in the sports and life \& style section, though, are not viewed as much; the upper quartile for sports articles is below the lower quartile for opinions pieces, and the upper quartile for life \& style articles is not much higher. This makes sense given the atmosphere at the Claremont Colleges. Students generally seem less interested in topics covered in sports and life and style pieces than they are in topics covered in news and opinions pieces.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{End Product}
+\section{Cumulative Product}
 This project is not only about gaining insights into student discourse, but also about creating an infrastructural tool that allows other interested students to find answers to their own questions about our history. With that goal in mind, we created an interactive shiny app that can respond to users' queries on different topics, authors and articles and then generate plots or perform analyses similar to those in this report. The app is online at \href{https://ziqixiong.shinyapps.io/TopicAnalysis}{https://ziqixiong.shinyapps.io/TopicAnalysis}.
 \vspace{1cm}
 
