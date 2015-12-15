@@ -84,16 +84,13 @@ The chart indicates that the editorial board seems to focus primarily on on-camp
 
 \subsection{Miscellaneous Insights}
 
-There's a lot to be learned from the data beyond the topic content analysis. For reference, here (again) is a glimpse of the data that we have on hand:
-
 ```{r, echo=FALSE}
 articles <- readData()
-glimpse(articles)
 ```
 
-With a little bit of wrangling and visualization, we were able to arrive at some interesting findings that might be of some value to the staff at *TSL*. For example, it's no secret that the newspaper struggles with retaining staff writers. But just how bad is it? By tracking the date of each writer's first published article and the writer's last published article, we were able to get a sense of how long they wrote for the paper.
-[CONSIDER CUTTING THE BELOW]
-```{r}
+There's a lot to be learned from the data beyond the topic content analysis. For example, with a little bit of wrangling and visualization, we were able to arrive at some interesting findings that might be of some value to the staff at *TSL*. For example, it's no secret that the newspaper struggles with retaining staff writers. But just how bad is it? By tracking the date of each writer's first published article and the writer's last published article, we were able to get a sense of how long they wrote for the paper. Plotting the data, we got the following graph:
+
+```{r, echo=FALSE}
 # break down date published into component parts, determine semester published
 articles <- articles %>%
   mutate(yearPublished = year(published_date)) %>%
@@ -114,9 +111,6 @@ retention <- articles %>%
 
 retention <- retention[!duplicated(retention[,6]),]
 ```
-
-With the above, we were able to obtain the following graph:
-
 ```{r}
 retention %>%
   group_by(semestersTotal) %>%
@@ -141,20 +135,6 @@ retention %>%
   c('News','Sports','Opinions','L&S')) + xlab('Number of Semesters Writing for TSL') +
   ylab('Number of Writers') + ggtitle('Retention Rate by Section') +
   scale_x_continuous(limits=c(1,13),breaks=seq(0,13,2))
-```
-
-Taking the log of the x-axis, we get:
-
-```{r}
-retention %>%
-  filter(section_id != 5) %>%
-  group_by(semestersTotal, section_id) %>%
-  summarise(n = n()) %>%
-  ggplot(aes(x = log(semestersTotal), y=n, color=factor(section_id))) + geom_point() +
-  geom_line() + scale_color_discrete(name="Section", labels =
-  c('News','Sports','Opinions','L&S')) +
-  xlab('log(Number of Semesters Writing for TSL)') + ylab('Number of Writers') + 
-  ggtitle('Retention Rate by Section')
 ```
 
 It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. Unfortunately, we can't filter those writers out given the data that we have.
@@ -190,118 +170,29 @@ grid.arrange(News_section_articles_per_writer,Opinions_section_articles_per_writ
              LS_section_articles_per_writer,Sports_section_articles_per_writer, ncol=2)
 ```
 
-It does seem, though, like there are a few especially prolific writers. A lot of them turned out to be variations of "Editorial Board" and "The Student Life Staff," but, after excluding those, we can identify the rest:
-
-```{r, echo=FALSE, results='hide'}
-# view top writers
-sort(articles_per_writer$total)
-```
-```{r, echo=FALSE, results='hide'}
-row(articles_per_writer)[articles_per_writer[,2]==68]
-articles_per_writer[69,]$profile_id
-```
-```{r, echo=FALSE}
-# First place: Wes Haas
-as.character((articles %>%
-   filter(profile_id==81))[1,]$author_name)
-(articles %>%
-  filter(profile_id==81))[c(1:10),c(2,4)]
-```
-```{r, echo=FALSE, results='hide'}
-#row(articles_per_writer)[articles_per_writer[,2]==64]
-#articles_per_writer[34,]$profile_id
-```
-```{r, echo=FALSE}
-# Second place: Editorial Board
-#as.character((top_writer = articles %>%
-#  filter(profile_id==39))[1,]$author_name)
-#(articles %>%
-#  filter(profile_id==39))[c(1:10),c(2,4)]
-```
-```{r, echo=FALSE, results='hide'}
-#row(articles_per_writer)[articles_per_writer[,2]==61]
-#articles_per_writer[148,]$profile_id
-```
-```{r, echo=FALSE}
-# Third place: Editorial Board
-#as.character((top_writer = articles %>%
-#  filter(profile_id==176))[1,]$author_name)
-#(articles %>%
-#  filter(profile_id==176))[c(1:10),c(2,4)]
-```
-```{r, echo=FALSE, results='hide'}
-row(articles_per_writer)[articles_per_writer[,2]==57]
-articles_per_writer[88,]$profile_id
-```
-```{r, echo=FALSE}
-# Fourth Place: Tim Taylor
-as.character((top_writer = articles %>%
-  filter(profile_id==103))[1,]$author_name)
-(articles %>%
-  filter(profile_id==103))[c(1:10),c(2,4)]
-```
-```{r, echo=FALSE, results='hide'}
-#row(articles_per_writer)[articles_per_writer[,2]==51]
-#articles_per_writer[147,]$profile_id
-```
-```{r, echo=FALSE}
-# Fifth Place: The Student Life Staff
-#as.character((top_writer = articles %>%
-#  filter(profile_id==175))[1,]$author_name)
-#(articles %>%
-#  filter(profile_id==175))[c(1:10),c(2,4)]
-```
-```{r, echo=FALSE, results='hide'}
-row(articles_per_writer)[articles_per_writer[,2]==48]
-articles_per_writer[562,]$profile_id
-```
-```{r, echo=FALSE}
-# Sixth Place: Nachi Baru
-as.character((top_writer = articles %>%
-  filter(profile_id==634))[1,]$author_name)
-(articles %>%
-  filter(profile_id==634))[c(1:10),c(2,4)]
-```
-
 Finally, we were able to get a sense of how popular articles published this semester have been by looking at the number of times each article was visited. Because data on the number of visitors to each article only began being collected in the fall semester of 2015, we had to limit our analysis to articles in that time period. Below are the top 10 most-viewed articles from the fall:
 
 ```{r, echo=FALSE}
-clicks <- read.csv('articles.csv')
+clicks <- read.csv('data/articles.csv')
 clicks <- clicks[,c(1,4)]
 names(clicks) <- c('id','clicks')
 
 # most viewed articles (title, date published, writer, number of clicks)
 # FIGURE OUT HOW TO GET THIS TO NOT GO SO FAR TO THE RIGHT
 (articles %>%
+  filter(yearPublished == 2015 & semester == 'fall') %>%
   left_join(clicks, by = 'id') %>%
   arrange(desc(clicks)) %>%
-  slice(1:15))[,c(2,4,7,12)]
+  slice(1:10))[,c(2,4,7,12)]
 ```
 ```{r, echo=FALSE, results='hide'}
 # for convenience of future code, set clicks to automatically filter fall 2015
 clicks <- articles %>%
   filter(yearPublished == 2015 & semester == 'fall') %>%
   left_join(clicks, by = 'id')
-
-# get info on least viewed pieces
-(clicks %>%
-  arrange(clicks) %>%
-  slice(1:10))[,c(2,4,7,12)]
-
-# interesting that they were all from the 12/4 issue. might be because
-# it was the last issue and nothing really happened (right after Thanksgiving break).
 ```
 
 For those who are familiar with recent events on campus this semester, the list makes sense. For example, Lisette Espinosa emailed her opinions piece to Claremont McKenna College's former Dean of Student Mary Spellman, who gave a controversial reply that, some would argue, led to her resignation. Indeed, it seems like a lot of the top articles are related to issues of race, sexual assault, campus climate, and college image. 
-
-We can also identify the least-viewed pieces:
-[CONSIDER CUTTING THIS]
-```{r, echo=FALSE}
-(clicks %>%
-  filter(published_date != as.Date('2015-12-04')) %>%
-  arrange(clicks) %>%
-  slice(1:10))[,c(2,4,7,12)]
-```
 
 Similarly, we can identify the most-viewed writers on average:
 
@@ -329,8 +220,6 @@ Nonetheless, we might be interested in seeing which regular contributors to the 
   arrange(desc(average_views)) %>%
   slice(1:10))
 ```
-
-[MAYBE EXPLAIN STUFF HERE]
 
 We now move from examining individual view counts to examining the aggregate data. Here's a boxplot of article views for articles published in fall 2015:
 
