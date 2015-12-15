@@ -31,35 +31,35 @@ articles = join.articles.with.topics(articles,topic.model,3)
 
 
 \section{Motivation}
-They say that those who do not know history are doomed to repeat it. We hope to show how campus dialogue on the Claremont Colleges has changed over time, using articles from The Student Life as representative of the discourse surrounding hot-button issues on campus. \textit{The Student Life}, or \textit{TSL}, is the oldest college newspaper in Southern California, and it is student-written and managed. It thus serves as a good glimpse into the thoughts and discourse of the students of the 5 Claremont Colleges (Pomona, Claremont McKenna, Scripps, Pitzer, Harvey Mudd). The student population itself is in a constant state of flux, as students generally spend only 4-5 years on campus. This ever changing population, and thus ever changing set of \textit{TSL} writers (especially given that writers are probably working for \textit{TSL} during their whole time on campus), means that issues in campus dialogue can repeatedly resurface when current students are not aware of the college discussions that took place four or five years ago. Plus, \textit{TSL} does not have a `` static''  format; the number of articles published in each issue depends on the number of articles written, rather than publishing the same length paper each week. This allows for interesting data on word usage trends, topics covered, authorship, and more over time. How are topics evolving over time? Can we see major spikes in certain topics/phrases and trace those back to major events? Can we use these trends to inform our current dialogue? With better, more easily accessible information on \textit{TSL} history, we can make it easier for future students to see what kind of discussion and action has taken place at the Claremont Colleges so that they can better understand the history of intellectual conversations on our campus and create fresher, deeper discussions in the future.
+They say that those who do not know history are doomed to repeat it. We hope to show how campus dialogue on the Claremont Colleges has changed over time, using articles from \textit{The Student Life} as representative of the discourse surrounding hot-button issues on campus. \textit{The Student Life}, or \textit{TSL}, is the student-run, weekly newspaper of the five Claremont Colleges (Pomona, Claremont McKenna, Scripps, Pitzer, and Harvey Mudd). It thus serves as a good glimpse into the thoughts and discourse of the students on campus. The student population itself is in a constant state of flux, as students generally spend only four or five years on campus. This ever-changing population, and thus ever changing set of \textit{TSL} writers (especially given that most writers probably do not work for \textit{TSL} their entire college careers), means that issues in campus dialogue can repeatedly resurface when current students are not aware of the related discussions that took place four or five years ago. Moreover, \textit{TSL} does not have a `` static''  format; that is, the number of articles and pages printed is not necessarily the same each issue. Rather, it varies depending on the amount of content gathered by the student staff. This allows for interesting data on word usage trends, topics covered, authorship, and more over time. How are topics evolving over time? Can we see major spikes in certain topics and phrases and trace those back to major events? Can we use these trends to inform our current dialogue? With better, more easily accessible information on \textit{TSL} history, we can make it easier for future students to see what kind of discussion and action has taken place at the Claremont Colleges so that they can better understand the history of intellectual conversations on our campus and create fresher, deeper discussions in the future.
 
 \section{Methodology}
 
 \subsection{Data Source}
 
-Our raw data was acquired directly from \textit{TSL}'s SQL database on ASPC peninsula server. The data is in the format of three csv tables: 
+Our raw data was acquired directly from \textit{TSL}'s SQL database on ASPC peninsula server. The data is in the format of three CSV tables: 
 
 \begin{enumerate}
-\item \textbf{articles}: This table contains the information related to the \textit{TSL} articles, including id, title, content, status (published or not), created date, published date, updated date, section id and issue id.
-\item \textbf{profiles}: This table contains the information related to the \textit{TSL} staff, including id, name and position.
-\item \textbf{articles\_profiles}: This table contains the authorship of \textit{TSL} articles. Each row contains a \textit{TSL} staff member id and an article id.
+\item \textbf{articles}: This table contains the information related to the \textit{TSL} articles, including ID, title, content, status (published or not), created date, published date, updated date, section ID, and issue ID.
+\item \textbf{profiles}: This table contains the information related to the \textit{TSL} staff, including ID, name, and position.
+\item \textbf{articles\_profiles}: This table contains the authorship of \textit{TSL} articles. Each row contains a \textit{TSL} staff member ID and an article ID.
 \end{enumerate}
 
-We joined the three tables by article\_id and profile\_id and filtered out all the articles that are not published, do not have enough content (body text less than 50 words), or miss author or published date information. We selected important variables including title, content, published date, and author's name for our analysis.
+We joined the three tables by article\_id and profile\_id and filtered out all the articles that are not published, do not have enough content (body text of fewer than 50 words), or are missing author or published date information. We selected important variables including title, content, published date, and author's name for our analysis.
 
 To access the data we used, visit our code repository at \href{https://github.com/ZiqiXiong/TopicModeling}{https://github.com/ZiqiXiong/TopicModeling}.
 
 \subsection{Model Training}
 
-Our goal is to build an unsupervised model that cluster the \textit{TSL} articles by their similarity in word usage so that each cluster can be labeled later and studied as a topic. With that goal in mind, we studied and used Latent Dirichlet Allocation(LDA) developed by Andrew Ng, et al., in 2003 for our project. LDA is a probabilistic model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. When applied to a collection of text documents, LDA views each document as a mixture of a small number of topics and each word generated by one of the document's topics. With different inference techniques such as Gibbs Sampling, LDA is able to learn the composition of each topic (its associated word probabilities) and the topic mixture of each document.\footnote{``Latent Dirichlet Allocation'', Andrew Ng, et al., \href{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}}
+Our goal was to build an unsupervised model that clusters the \textit{TSL} articles by their similarity in word usage so that each cluster can be labeled later and studied as a topic. With that goal in mind, we studied and used Latent Dirichlet Allocation(LDA), developed by Andrew Ng, et al., in 2003, for our project. LDA is a probabilistic model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. When applied to a collection of text documents, LDA views each document as a mixture of a small number of topics and each word as an occurrence generated by one of the document's topics. With different inference techniques such as Gibbs Sampling, LDA is able to learn the composition of each topic (its associated word probabilities) and the topic mixture of each document.\footnote{``Latent Dirichlet Allocation'', Andrew Ng, et al., \href{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}{https://www.cs.princeton.edu/~blei/papers/BleiNgJordan2003.pdf}}
 
-Before training our LDA model, we first processed the body text of \textit{TSL} articles by converting all words to lower case and reducing words to their stems, so that a group of words such as `` study'' ,`` Study''  and `` studies''  can be treated as one. We also removed punctuation, stop words (the most common, short function words), and extremely rare words that would only add noise to our model training. Finally, we transformed the collection of articles into a document-term matrix with each row representing an article and column representing a word. 
+Before training our LDA model, we first processed the body text of \textit{TSL} articles by converting all words to lower case and reducing words to their stems, so that a group of words such as `` study'' ,`` Study''  and `` studies''  can be treated as one. We also removed punctuation, stop words (the most common short function words), and extremely rare words that would only add noise to our model training. Finally, we transformed the collection of articles into a document-term matrix with each row representing an article and each column representing a word. 
 
-By using the R package `` topicmodel'', We trained multiple LDA models with different numbers of topics as input, including 25, 30, 35, 40, 45 and 50, so that we can use the most suitable model in our analysis later depending on how general we want the topics to be.
+By using the R package `` topicmodel'', We trained multiple LDA models with different numbers of topics---25, 30, 35, 40, 45 and 50---as input so that we can adjust the generality of the topics to identify and obtain the most suitable model for our analysis.
 
 \subsection{Result and Visualization}
 
-Our LDA model is capable of clustering key words into human-recognizable topic. Take five random topics discovered by our 40-topic model as an example:
+Our LDA model is capable of clustering key words into human-recognizable topics. Take five random topics discovered by our 40-topic model as an example:
 
 <<>>=
 topic.terms = get.topic.terms(topic.model,20)
@@ -67,9 +67,9 @@ set.seed(47)
 topic.terms[1:5,sample(40,5)]
 @
 
-The 5 topics can be easily identified as ``music'', ``sex'', ``campus event'', ``student protest'', and ``sports game'' by their top keywords.
+The 5 topics can be easily identified as ``music'', ``sex'', ``campus events'', ``student protests'', and ``sports games'' by their top keywords.
 
-In addition to the distribution of words in topics, the LDA model can also calculates the percentage of a topic in an article and infers what the article is about. Take five random \textit{TSL} articles for example:
+In addition to the distribution of words in each topic, the LDA model can also calculate the percentage of each topic in an article and thereby infer the overall subject of the article. Take five random \textit{TSL} articles for example:
 
 <<>>=
 set.seed(37)
@@ -81,9 +81,9 @@ sample.articles
 topic.terms[1:5, sample.articles[['primary.topic']]]
 @
 
-As we can see from the result above, ``Women's Basketball Struggles Through Tough First Games'' is categorized into topic 1 about team sports, ``Peace, Popular Opinion, and the Prisoner Exchange'' into topic 16 about national politics, ``Panel at CMC Debates Approach to Syria Conflict'' into topic 10 about student discussion, `` Students Put Out Fire in Scripps Dorm'' into topic 34 about residential life, and ``Ye Olde TSL: 1927, The First Year of the Sponsor Group'' into topic 27 about Pomona sponsor program. 
+As we can see from the result above, ``Women's Basketball Struggles Through Tough First Games'' is categorized into topic 1, which is about team sports; ``Peace, Popular Opinion, and the Prisoner Exchange'' into topic 16, which is about national politics; ``Panel at CMC Debates Approach to Syria Conflict'' into topic 10, which is about student discussion; `` Students Put Out Fire in Scripps Dorm'' into topic 34, which is about residential life; and ``Ye Olde TSL: 1927, The First Year of the Sponsor Group'' into topic 27, which is about Pomona's sponsor program. 
 
-Our model can also discover topics in articles that are not in our \textit{TSL} dataset. For example, it can successfully categorize an 108-word excerpt from Martin Luther King's speech ``I Have a Dream'' into topic 16 about national politics and topic 31 about student protest.
+Our model can also identify the main topics in an article that is not already in our \textit{TSL} dataset. For example, it can successfully categorize an 108-word excerpt from Martin Luther King's speech ``I Have a Dream'' into topic 16, which is about national politics, and topic 31, which is about student protest.
 
 <<>>=
 test.paragraph = "I have a dream that one day on the red hills of Georgia, 
@@ -98,14 +98,14 @@ test.result
 topic.terms[1:5, test.result[['Topic.ID']]]
 @
 
-After categorizing each article into its related topics, we are able to plot the frequency of a topic over time by counting the number of its articles every week. For example, here is the plot of topic 31 about films:
+After categorizing each article into its related topics, we were able to plot the frequency with which a given topic appears over time by counting the number of articles printed in each issue of \textit{TSL} that are about that topic. For example, here is the plot of topic 31, which is about films:
 
 <<fig=TRUE,height=10,width=15>>=
 topicgraph(articles,3,2,14)
 @
 
 
-We can also visualize what topics each author writes about. Take Opinion writer William Schumacher for example: 
+We can also visualize which topics each writer tends to write about. Take opinions columnist William Schumacher, for example: 
 
 <<fig=TRUE,height=10,width=15>>=
 print(authorChart2(articles,'William Schumacher',2))
@@ -310,7 +310,7 @@ Similarly, we can identify the most-viewed writers on average:
 
 A lot of these are one-hit writers, which makes sense. The opinions section regularly invites guest writers to publish a piece in the paper. Typically, when this happens, the guest writer writes about a particularly controversial or timely subject; that is what motivates them to write, after all. As such, their pieces often get a lot of views. On the other hand, the other sections' pieces are written by regular staff writers, who have to cover the mundane along with the occasional big events each semester. Since the guest writers typically only write once about a hot-button issue, it makes sense that many of the most-viewed writers have only written once for the newspaper.
 
-Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views:
+Nonetheless, we might be interested in seeing which regular contributors to the paper's content get the most views. Here, a regular contributor is defined as one who written more than three articles for the paper:
 
 <<echo=FALSE>>=
 # let's see among the more consistent writers
@@ -323,45 +323,19 @@ Nonetheless, we might be interested in seeing which regular contributors to the 
   slice(1:10))
 @
 
-We now move from examining individual view counts to examining the aggregate data. Here's a boxplot of article views for articles published in fall 2015:
+We now move from examining individual view counts to examining the aggregate data. Here's a histogram of article views for articles published in fall 2015, excluding the outliers mentioned earlier:
 
 <<fig=TRUE>>=
-# plot distribution of views in fall 2015
 clicks %>%
-  ggplot(aes(x = semester, y = clicks)) + geom_boxplot() + xlab('Semester') +
-  ylab('Cumulative Number of Clicks') +
+  ggplot() + geom_histogram(aes(x = clicks), binwidth = 10) +
+  scale_x_continuous(limits = c(0,1000)) +
+  xlab('Number of Clicks') + ylab('Number of Articles') + 
   ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
 @
 
+It seems like most articles are viewed fewer than 300 times, although there are a decent number that are viewed more than 750 times.
 
-We can see that there are some extreme outliers---the articles from the most-viewed list above---that make it difficult to look at the rest of the observations, so we'll focus our view on the bulk of the data:
-
-<<fig=TRUE, warning=FALSE>>=
-# exclude outliers from view
-clicks %>%
-  ggplot(aes(x = semester, y = clicks)) + geom_boxplot() +
-  scale_y_continuous(limits = c(0,500)) + xlab('Semester') +
-  ylab('Cumulative Number of Clicks') +
-  ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
-@
-
-
-The median article published this semester, arranged by number of views, was viewed just over 200 times. The upper quartile of articles are viewed at least 300 times each, while the lower quartile are viewed at most about 145 times each.
-
-We can break the data down by section too:
-
-<<fig=TRUE, warning=FALSE>>=
-# do the same as above but by section
-clicks %>%
-  filter(section_id != 5) %>%
-  mutate(section = ifelse(section_id==1, 'News', ifelse(section_id==2, 'Sports',
-  ifelse(section_id==3, 'Opinions', 'L&S')))) %>%
-  ggplot(aes(x = factor(section), y = clicks)) + geom_boxplot() +
-  xlab('Section') + ylab('Cumulative Number of Clicks') +
-  ggtitle('Distribution of Clicks by Section of TSL Fall 2015 Articles')
-@
-
-Focusing on the bulk of the observations: 
+We can break the data down by section too, this time with boxplots:
 
 <<fig=TRUE, warning=FALSE>>=
 # exclude outliers from view
