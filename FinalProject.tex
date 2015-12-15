@@ -267,12 +267,13 @@ The chart indicates that the editorial board seems to focus primarily on topic 1
 \subsection{Miscellaneous Insights}
 
 
-There's a lot to be learned from the data beyond the topic content analysis. For example, with a little bit of wrangling and visualization, we were able to arrive at some interesting findings that might be of some value to the staff at \textit{TSL}. For example, it's no secret that the newspaper struggles with retaining staff writers. But just how bad is it? By tracking the date of each writer's first published article and the writer's last published article, we were able to get a sense of how long they wrote for the paper. Plotting the data, we got the following graph:
+There's a lot to be learned from the data beyond the topic content analysis. For example, with a little bit of wrangling and visualization, we were able to arrive at some interesting findings that might be of some value to the staff at \textit{TSL}. For example, it's no secret that the newspaper struggles with retaining staff writers. But just how bad is it? By tracking the date of each writer's first published article and the writer's last published article, we were able to get a sense of how long they wrote for the paper. We excluded one-time writers for the opinions section, since those tend to be one-time guest writers who are not part of \textit{TSL} staff. Plotting the data, we got the following graph:
 
 
 \begin{Schunk}
 \begin{Sinput}
 > retention %>%
++   filter(yearsTotal > 1 | section_id !=3) %>%
 +   group_by(semestersTotal) %>%
 +   summarise(n = n()) %>%
 +   ggplot(aes(x = semestersTotal)) + geom_line(aes(y=n)) + geom_point(aes(y=n)) +
@@ -283,7 +284,7 @@ There's a lot to be learned from the data beyond the topic content analysis. For
 \end{Schunk}
 \includegraphics{FinalProject-015}
 
-It seems like \textit{TSL}'s reputation for shedding writers isn't exaggerated. Out of the pool of writers over the past five years, 652 writers stay for one semester or less; 108 writers stay for two semesters; 40 stay for three; and 85 stay for four or more semesters. There are a few caveats, though. First, since the database only includes articles published within the last five years, it's possible that some writers who were seniors when the data first began being collected had been writing for \textit{TSL} for many semesters but are represented as only writing for one semester because their earlier articles aren't included in the database. This might lead to an overestimate of the number of writers who only stay for one or two semesters. Second, the method we applied above to calculate retention reports the difference between the first semester they began writing for \textit{TSL} and the last semester they wrote for \textit{TSL}. Some writers, however, take a semester or more off from writing for \textit{TSL} to study abroad or simply pursue other interests before returning to write again. In these cases, the number of semesters they spent writing for \textit{TSL} are overestimated. Lastly, there are a few points that go beyond 8, and even 10, semesters. Those represent a mix of people staying longer and alumni writing guest columns.
+It seems like \textit{TSL}'s reputation for shedding writers isn't exaggerated. Out of the pool of writers over the past five years, 448 writers stay for one semester or less; 108 writers stay for two semesters; 40 stay for three; and 85 stay for four or more semesters. There are a few caveats, though. First, since the database only includes articles published within the last five years, it's possible that some writers who were seniors when the data first began being collected had been writing for \textit{TSL} for many semesters but are represented as only writing for one semester because their earlier articles aren't included in the database. This might lead to an overestimate of the number of writers who only stay for one or two semesters. Second, the method we applied above to calculate retention reports the difference between the first semester they began writing for \textit{TSL} and the last semester they wrote for \textit{TSL}. Some writers, however, take a semester or more off from writing for \textit{TSL} to study abroad or simply pursue other interests before returning to write again. In these cases, the number of semesters they spent writing for \textit{TSL} are overestimated. Lastly, there are a few points that go beyond 8, and even 10, semesters. Those represent a mix of people staying longer and alumni writing guest columns.
 
 We can easily track the retention rate by section as well:
 
@@ -291,6 +292,7 @@ We can easily track the retention rate by section as well:
 \begin{Sinput}
 > retention %>%
 +   filter(section_id != 5) %>%
++   filter(yearsTotal > 1 | section_id !=3) %>%
 +   group_by(semestersTotal, section_id) %>%
 +   summarise(n = n()) %>%
 +   ggplot(aes(x = semestersTotal, y=n, color=factor(section_id))) + geom_point() +
@@ -302,7 +304,7 @@ We can easily track the retention rate by section as well:
 \end{Schunk}
 \includegraphics{FinalProject-016}
 
-It seems like the opinions section suffers the steepest drop in returning writers. A lot of this may be attributable to the fact that anywhere from one-fourth to one-half of the articles in the opinions section each week are written by guest writers, who typically write only for a single, specific event or issue. 
+It seems like the news and life \& style sections suffer the largest dropoff in retention beyond one semester. At least for the news section, this makes some sense; the news section is often the most demanding, since writers sometimes have to squeeze time in their schedules to cover time-sensitive news events on short notice.
 
 Another area of interest might be how prolific writers for \textit{TSL} are---that is, how many articles each writer writes. It seems pretty reasonable to expect that trend to resemble the retention rates shown above. After all, a person can only write so many articles if they're only a writer for one semester. And indeed, we can see that this is the case:
 

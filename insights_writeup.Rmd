@@ -236,9 +236,7 @@ We can see that there are some extreme outliers---the articles from the most-vie
 ```{r, warning=FALSE}
 # exclude outliers from view
 clicks %>%
-  ggplot(aes(x = semester, y = clicks)) + geom_boxplot() +
-  scale_y_continuous(limits = c(0,500)) + xlab('Semester') +
-  ylab('Cumulative Number of Clicks') +
+  ggplot() + geom_histogram(aes(x = clicks), binwidth = 10) + scale_x_continuous(limits = c(0,1000)) +
   ggtitle('Distribution of Clicks of TSL Fall 2015 Articles')
 ```
 
