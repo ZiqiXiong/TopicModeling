@@ -98,22 +98,20 @@ test.result
 topic.terms[1:5, test.result[['Topic.ID']]]
 @
 
-After categorizing each article into its related topics, we are able to plot the frequency of a topic over time by counting the number of its articles every week. For example, here is the plot of topic 31 about student protest:
+After categorizing each article into its related topics, we are able to plot the frequency of a topic over time by counting the number of its articles every week. For example, here is the plot of topic 31 about films:
 
 <<fig=TRUE,height=10,width=15>>=
-topicgraph(articles,31,2,14)
+topicgraph(articles,3,2,14)
 @
 
-As we can see from the plot, the frequency of topic 31 experienced an unprecedented spike during the 2015 Fall semester, which reflects the heated discussion on the series of college protests in Yale, Mizzou and Claremont McKenna this fall.
 
-We can also visualize what topics each author writes about. Take TSL editorial board for example: 
+We can also visualize what topics each author writes about. Take Opinion writer William Schumacher for example: 
 
 <<fig=TRUE,height=10,width=15>>=
-print(authorChart2(articles,'Editorial Board',2))
-topic.terms[1:10,c(10,19)]
+print(authorChart2(articles,'William Schumacher',2))
+topic.terms[1:10,c(33,10)]
 @
 
-The plot shows that TSL editorial board writes most about topic 10 about student discussions and topic 19 about campus media, which are indeed what editors typically voice their opinions about. 
 
 \section{Findings}
 
@@ -154,29 +152,29 @@ Another neat feature of our model is its analysis and visualization of topic cov
 
 <<fig=TRUE,height=10,width=15>>=
 print(authorChart2(articles,'Diane Lee',2))
-topic.terms[1:10,c(10,19)]
+topic.terms[1:10,39]
 @
 
-The graph shows the topics the writer has written the most about. In this case, we can see that Diane Lee wrote a lot of pieces on administrative actions and decisions at the Claremont Colleges.
+The graph shows the topics the writer has written the most about. In this case, we can see that Diane Lee wrote a lot of pieces on topic 39 about administrative actions and decisions at the Claremont Colleges.
 [maybe elaborate on her positions through the years]
 
 Here's another example:
 
 <<fig=TRUE,height=10,width=15>>=
 print(authorChart2(articles,'Sana Kadri',2))
-topic.terms[1:10,c(10,19)]
+topic.terms[1:10,5]
 @
 
-It seems like Sana Kadri wrote a lot about internationalism and race for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
+It seems like Sana Kadri wrote a lot on topic 5 internationalism and race for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
 
 Finally, we can examine the topic content of articles written by the editorial board of \textit{TSL}. Each issue, the editorial board, which consists of the editor-in-chief and the two managing editors, writes a brief editorial that is published in the opinions section. Often, it reflects on another article printed in the same issue. Here's the topic content analysis of the editorial board's pieces:
 
 <<fig=TRUE,height=10,width=15>>=
 print(authorChart2(articles,'Editorial Board',2))
-topic.terms[1:10,c(10,19)]
+topic.terms[1:10,10]
 @
 
-The chart indicates that the editorial board seems to focus primarily on on-campus issues related to inequality. This would make sense, since events related to such issues often occur and are covered by \textit{TSL}. Also, these issues often generate a lot of discussion and, at times, controversy on campus, making them relevant and appealing topics of conversation for the editorial board to discuss.
+The chart indicates that the editorial board seems to focus primarily on topic 10 about on-campus student controversies. This would make sense, since events related to such issues often occur and are covered by \textit{TSL}. Also, these issues often generate a lot of discussion and, at times, controversy on campus, making them relevant and appealing topics of conversation for the editorial board to discuss.
 
 \subsection{Miscellaneous Insights}
 

@@ -139,41 +139,39 @@ Our model can also discover topics in articles that are not in our TSL dataset. 
 \end{Soutput}
 \end{Schunk}
 
-After categorizing each article into its related topics, we are able to plot the frequency of a topic over time by counting the number of its articles every week. For example, here is the plot of topic 31 about student protest:
+After categorizing each article into its related topics, we are able to plot the frequency of a topic over time by counting the number of its articles every week. For example, here is the plot of topic 31 about films:
 
 \begin{Schunk}
 \begin{Sinput}
-> topicgraph(articles,31,2,14)
+> topicgraph(articles,3,2,14)
 \end{Sinput}
 \end{Schunk}
 \includegraphics{FinalProject-005}
 
-As we can see from the plot, the frequency of topic 31 experienced an unprecedented spike during the 2015 Fall semester, which reflects the heated discussion on the series of college protests in Yale, Mizzou and Claremont McKenna this fall.
 
-We can also visualize what topics each author writes about. Take TSL editorial board for example: 
+We can also visualize what topics each author writes about. Take Opinion writer William Schumacher for example: 
 
 \begin{Schunk}
 \begin{Sinput}
-> print(authorChart2(articles,'Editorial Board',2))
-> topic.terms[1:10,c(10,19)]
+> print(authorChart2(articles,'William Schumacher',2))
+> topic.terms[1:10,c(33,10)]
 \end{Sinput}
 \begin{Soutput}
-      Topic 10   Topic 19 
- [1,] "student"  "write"  
- [2,] "discuss"  "book"   
- [3,] "issu"     "read"   
- [4,] "chang"    "stori"  
- [5,] "talk"     "articl" 
- [6,] "question" "tsl"    
- [7,] "campus"   "news"   
- [8,] "import"   "writer" 
- [9,] "pomona"   "media"  
-[10,] "colleg"   "publish"
+      Topic 33  Topic 10  
+ [1,] "colleg"  "student" 
+ [2,] "student" "discuss" 
+ [3,] "school"  "issu"    
+ [4,] "educ"    "chang"   
+ [5,] "pomona"  "talk"    
+ [6,] "class"   "question"
+ [7,] "admiss"  "campus"  
+ [8,] "liber"   "import"  
+ [9,] "percent" "pomona"  
+[10,] "art"     "colleg"  
 \end{Soutput}
 \end{Schunk}
 \includegraphics{FinalProject-006}
 
-The plot shows that TSL editorial board writes most about topic 10 about student discussions and topic 19 about campus media, which are indeed what editors typically voice their opinions about. 
 
 \section{Findings}
 
@@ -224,25 +222,16 @@ Another neat feature of our model is its analysis and visualization of topic cov
 \begin{Schunk}
 \begin{Sinput}
 > print(authorChart2(articles,'Diane Lee',2))
-> topic.terms[1:10,c(10,19)]
+> topic.terms[1:10,39]
 \end{Sinput}
 \begin{Soutput}
-      Topic 10   Topic 19 
- [1,] "student"  "write"  
- [2,] "discuss"  "book"   
- [3,] "issu"     "read"   
- [4,] "chang"    "stori"  
- [5,] "talk"     "articl" 
- [6,] "question" "tsl"    
- [7,] "campus"   "news"   
- [8,] "import"   "writer" 
- [9,] "pomona"   "media"  
-[10,] "colleg"   "publish"
+ [1] "student"  "colleg"   "faculti"  "wrote"    "dean"     "presid"  
+ [7] "email"    "committe" "staff"    "pitzer"  
 \end{Soutput}
 \end{Schunk}
 \includegraphics{FinalProject-010}
 
-The graph shows the topics the writer has written the most about. In this case, we can see that Diane Lee wrote a lot of pieces on administrative actions and decisions at the Claremont Colleges.
+The graph shows the topics the writer has written the most about. In this case, we can see that Diane Lee wrote a lot of pieces on topic 39 about administrative actions and decisions at the Claremont Colleges.
 [maybe elaborate on her positions through the years]
 
 Here's another example:
@@ -250,50 +239,32 @@ Here's another example:
 \begin{Schunk}
 \begin{Sinput}
 > print(authorChart2(articles,'Sana Kadri',2))
-> topic.terms[1:10,c(10,19)]
+> topic.terms[1:10,5]
 \end{Sinput}
 \begin{Soutput}
-      Topic 10   Topic 19 
- [1,] "student"  "write"  
- [2,] "discuss"  "book"   
- [3,] "issu"     "read"   
- [4,] "chang"    "stori"  
- [5,] "talk"     "articl" 
- [6,] "question" "tsl"    
- [7,] "campus"   "news"   
- [8,] "import"   "writer" 
- [9,] "pomona"   "media"  
-[10,] "colleg"   "publish"
+ [1] "studi"    "american" "abroad"   "cultur"   "intern"   "countri" 
+ [7] "languag"  "world"    "unit"     "travel"  
 \end{Soutput}
 \end{Schunk}
 \includegraphics{FinalProject-011}
 
-It seems like Sana Kadri wrote a lot about internationalism and race for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
+It seems like Sana Kadri wrote a lot on topic 5 internationalism and race for \textit{TSL}. Our team for this project includes the opinions editor for \textit{TSL} this semester, who can confirm that Sana, who was an opinions columnist, was very passionate about those topics.
 
 Finally, we can examine the topic content of articles written by the editorial board of \textit{TSL}. Each issue, the editorial board, which consists of the editor-in-chief and the two managing editors, writes a brief editorial that is published in the opinions section. Often, it reflects on another article printed in the same issue. Here's the topic content analysis of the editorial board's pieces:
 
 \begin{Schunk}
 \begin{Sinput}
 > print(authorChart2(articles,'Editorial Board',2))
-> topic.terms[1:10,c(10,19)]
+> topic.terms[1:10,10]
 \end{Sinput}
 \begin{Soutput}
-      Topic 10   Topic 19 
- [1,] "student"  "write"  
- [2,] "discuss"  "book"   
- [3,] "issu"     "read"   
- [4,] "chang"    "stori"  
- [5,] "talk"     "articl" 
- [6,] "question" "tsl"    
- [7,] "campus"   "news"   
- [8,] "import"   "writer" 
- [9,] "pomona"   "media"  
-[10,] "colleg"   "publish"
+ [1] "student"  "discuss"  "issu"     "chang"    "talk"     "question"
+ [7] "campus"   "import"   "pomona"   "colleg"  
 \end{Soutput}
 \end{Schunk}
 \includegraphics{FinalProject-012}
 
-The chart indicates that the editorial board seems to focus primarily on on-campus issues related to inequality. This would make sense, since events related to such issues often occur and are covered by \textit{TSL}. Also, these issues often generate a lot of discussion and, at times, controversy on campus, making them relevant and appealing topics of conversation for the editorial board to discuss.
+The chart indicates that the editorial board seems to focus primarily on topic 10 about on-campus student controversies. This would make sense, since events related to such issues often occur and are covered by \textit{TSL}. Also, these issues often generate a lot of discussion and, at times, controversy on campus, making them relevant and appealing topics of conversation for the editorial board to discuss.
 
 \subsection{Miscellaneous Insights}
 
