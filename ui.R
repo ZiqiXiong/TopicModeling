@@ -16,6 +16,33 @@ selectInput("topic.number",label=h3("Number of topics:"),
                                selected="40 topics")
 
 shinyUI(navbarPage("Topic Analysis of TSL articles",
+                   tabPanel("About",
+                            h2("About"),
+                            p("This shiny app visualizes the result of Benji Lu, Kai Fukutaki,
+                              and Ziqi Xiong's semester project for MATH154: Computational Statistics."),
+                            p("We used ", a("Latent Dirichlet Allocation", href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation"),
+                              " model to analyze the content of 5000+
+                              articles published by ",a("The Student Life",href="http://tsl.news"),
+                            ". This gives us the popular topics (as distributions of words) among TSL articles and the
+                            topic composition of each article, which makes it possible to answer questions such as: ",
+                            tags$ul(tags$li("What is article 'Who Is the Happiest at the Happiest College in America?' about?"),
+                               tags$li("How did the popularity of the topic about Divestment change over time?"),
+                               tags$li("What topic does TSL editorial board care most about?"))),
+                            p('You can click on the five tabs in the navigation bar to know more about our project:',
+                              tags$ol(tags$li("Topic Keywords: This tab displays the key words of each topic and the labels
+                                              we manually assigned to the topics based on their key words. You can choose a
+                                              different number of topics using the drop down widget."),
+                                      tags$li("Source articles: This tab takes the id of a TSL articles and returns the
+                                              top 3 topics in that article. If you disable 'unsafe script blocking' in your
+                                              browser address bar, you can also view the original content of the article."),
+                                      tags$li("Analyze new article: This tab takes a new article from the textbox as input
+                                              and returns the top 3 topics in the article along with their weight."),
+                                      tags$li("Author Chart: This tab takes the name of a TSL writer from the text field as input
+                                                        and returns the 5 topics that he/she writes most about."),
+                                      tags$li("Topic vs Time: This tab takes the id of a topic from the text field as input
+                                                        and returns frequency of that topic (the number of related articles) over time.")
+                              )
+                            )),
                    tabPanel("Topic Keywords",
                             selectInput("topic.number",label=h3("Number of topics:"),
                                         choices=list("20"="20 topics","25"="25 topics","30"="30 topics","35"="35 topics",
